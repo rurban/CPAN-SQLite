@@ -1,0 +1,60 @@
+# http://module-build.sourceforge.net/META-spec.html
+#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
+name:         CPAN-SQLite
+version:      0.1_01
+installdirs:  site
+license:      perl
+abstract:     set up, maintain and search a minimal CPAN database
+authored_by:
+    - Randy Kobes <r.kobes@uwinnipeg.ca>
+requires:
+    Archive::Tar:                  1.08
+    CPAN::DistnameInfo:            0
+    File::Spec:                    0
+    IO::Zlib:                      0
+    DBD::SQLite:                   0
+    File::HomeDir:                 0
+    LWP::Simple:                   0
+distribution_type: module
+provides:
+  CPAN::SQLite:
+    file: lib/CPAN/SQLite.pm
+    version: 0.1_01
+  CPAN::SQLite::Extract:
+    file: lib/CPAN/SQLite/Extract.pm
+    version: 0.1_01
+  CPAN::SQLite::Index:
+    file: lib/CPAN/SQLite/Index.pm
+    version: 0.1_01
+  CPAN::SQLite::Info:
+    file: lib/CPAN/SQLite/Info.pm
+    version: 0.1_01
+  CPAN::SQLite::Populate:
+    file: lib/CPAN/SQLite/Populate.pm
+    version: 0.1_01
+  CPAN::SQLite::Search:
+    file: lib/CPAN/SQLite/Search.pm
+    version: 0.1_01
+  CPAN::SQLite::State:
+    file: lib/CPAN/SQLite/State.pm
+    version: 0.1_01
+  CPAN::SQLite::Util:
+    file: lib/CPAN/SQLite/Util.pm
+    version: 0.1_01
+  CPAN::SQLite::META:
+    file: lib/CPAN/SQLite/META.pm
+    version: 0.1_01
+  CPAN::SQLite::DBI:
+    file: lib/CPAN/SQLite/DBI.pm
+    version: 0.1_01
+  CPAN::SQLite::DBI::Query:
+    file: lib/CPAN/SQLite/DBI/Query.pm
+    version: 0.1_01
+  CPAN::SQLite::DBI::Index:
+    file: lib/CPAN/SQLite/DBI/Index.pm
+    version: 0.1_01
+no_index:
+    file:
+        - t/dot-cpan/CPAN/TestConfig.pm
+        - t/lib/TestSQL.pm
+generated_by: ExtUtils::MakeMaker version 6.17

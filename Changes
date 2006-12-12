@@ -1,0 +1,5 @@
+Revision history for Perl extension CPAN::SQLite.
+
+0.1 Oct 19, 2006
+  - initial version, derived from a minimal version of
+    CPAN::Search::Lite
