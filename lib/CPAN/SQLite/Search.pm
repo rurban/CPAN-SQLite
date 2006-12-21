@@ -7,7 +7,7 @@ use CPAN::SQLite::Util qw($mode_info);
 use CPAN::SQLite::DBI::Search;
 
 our $max_results = 0;
-our $VERSION = '0.1_01';
+our $VERSION = '0.1_02';
 my $cdbi_query;
 
 my %mode2obj;
@@ -280,11 +280,6 @@ optional if the C<CPAN> option is given.
 This option specifies the C<cpan_home> directory of an
 already configured CPAN.pm, which is where the database
 file will be stored if C<db_dir> is not given.
-
-=item * db_name =E<gt> $db_name
-
-This is the name of the database file. A default of
-C<cpandb-sqlite> will be used if this is not given.
 
 =item * max_results =E<gt> $max_results
 

@@ -1,5 +1,15 @@
 Revision history for Perl extension CPAN::SQLite.
 
-0.1 Oct 19, 2006
+0.1_02
+  - change name of database to cpandb.sql, and make it fixed,
+    as there was little need to have it configureable.
+  - support 
+       cpan> d ANDK/CPAN-xxx.tar.gz
+    for distributions.
+  - fixes to handle Bundle ids
+  - undef $sth after an $sth->finish, to help with concurrent access
+  - when using Test::More, use is(), rather than ok()
+
+0.1_01 Dec 12, 2006
   - initial version, derived from a minimal version of
     CPAN::Search::Lite

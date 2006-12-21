@@ -15,7 +15,7 @@ my $cwd = getcwd;
 my $CPAN = catfile $cwd, 't', 'cpan';
 
 plan tests => 2668;
-my $db_name = 'cpandb-test';
+my $db_name = 'cpandb.sql';
 my $db_dir = $cwd;
 
 my $cdbi = CPAN::SQLite::DBI::Search->new(db_name => $db_name,

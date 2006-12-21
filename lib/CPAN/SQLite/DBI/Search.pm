@@ -3,7 +3,7 @@ use base qw(CPAN::SQLite::DBI);
 use CPAN::SQLite::DBI qw($tables $dbh);
 use CPAN::SQLite::Util qw($full_id);
 
-our $VERSION = '0.1_01';
+our $VERSION = '0.1_02';
 
 use strict;
 use warnings;
@@ -52,6 +52,7 @@ sub fetch {
     $sth->finish;
     return if $sth->rows == 0;
     $self->extra_info(\%results);
+    undef $sth;
     return \%results;
   }
   else {
@@ -63,6 +64,7 @@ sub fetch {
     }
     $sth->finish;
     return if $sth->rows == 0;
+    undef $sth;
     return $results;
   }
 }
@@ -96,6 +98,7 @@ sub fetch_and_set {
     return if $sth->rows == 0;
     $self->extra_info(\%results);
     $meta_obj->set_data(\%results);
+    undef $sth;
     if ($want_ids) {
       $meta_results{$search->{id}} = $results{$search->{id}};
       return \%meta_results;
@@ -121,6 +124,7 @@ sub fetch_and_set {
     }
     $sth->finish;
     return if $sth->rows == 0;
+    undef $sth;
     $meta_obj->set_list_data($meta_results) if $set_list;
     return $want_ids ? $meta_results : 1;
   }

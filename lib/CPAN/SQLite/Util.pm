@@ -1,7 +1,7 @@
 package CPAN::SQLite::Util;
 use strict;
 use warnings;
-our $VERSION = '0.1_01';
+our $VERSION = '0.1_02';
 
 use base qw(Exporter);
 our (@EXPORT_OK, %chaps, %modes,
@@ -175,6 +175,7 @@ sub expand_dslip {
 
 sub download {
   my ($cpanid, $dist_file) = @_;
+  return unless ($cpanid and $dist_file);
   (my $fullid = $cpanid) =~ s!^(\w)(\w)(.*)!$1/$1$2/$1$2$3!;
   my $download = $fullid . '/' . $dist_file;
   return $download;

@@ -1,12 +1,12 @@
 package CPAN::SQLite::META;
-use CPAN::SQLite;
+require CPAN::SQLite;
 use strict;
 use warnings;
 use base qw(Exporter);
 our @EXPORT_OK;
 @EXPORT_OK = qw(setup update);
 our $global_id;
-our $VERSION = '0.1_01';
+our $VERSION = '0.1_02';
 
 sub new {
   my ($class, $cpan_meta) = @_;
@@ -70,17 +70,24 @@ sub set_data {
 
 package CPAN::SQLite::META::Distribution;
 use base qw(CPAN::SQLite::META);
-use CPAN::SQLite::Util qw(has_hash_data);
+use CPAN::SQLite::Util qw(has_hash_data download);
+use CPAN::DistnameInfo;
+my $ext = qr{\.(tar\.gz|tar\.Z|tgz|zip)$};
 
 sub set_one {
   my $self = shift;
   my $cpan_sqlite = $self->{cpan_sqlite};
   my $id = $self->{id};
+  my ($dist_name, $dist_id);
+  if ($id =~ /$ext/) {
+    ($dist_name, $dist_id) = $self->extract_distinfo($id);
+  }
+  return unless ($dist_name and $dist_id);
   my $class = $self->{class};
   $cpan_sqlite->{results} = {};
-  $cpan_sqlite->query(mode => 'dist', name => $id, meta_obj => $self);
+  $cpan_sqlite->query(mode => 'dist', name => $dist_name, meta_obj => $self);
   my $cpan_meta = $self->{cpan_meta};
-  $cpan_meta->{readonly}{$class}{$id};
+  $cpan_meta->{readonly}{$class}{$dist_id};
 }
 
 sub set_many {
@@ -101,6 +108,17 @@ sub set_list_data {
   my ($self, $results) = @_;
   $self->set_containsmods($results);
   $global_id = undef;
+}
+
+sub extract_distinfo {
+  my ($self, $pathname) = @_;
+  unless ($pathname =~ m{^\w/\w\w/}) {
+    $pathname =~ s{^(\w)(\w)(.*)}{$1/$1$2/$1$2$3};
+  }
+  my $d = CPAN::DistnameInfo->new($pathname);
+  my $dist = $d->dist;
+  my $download = download($d->cpanid, $d->filename);
+  return ($dist and $download) ? ($dist, $download) : undef;
 }
 
 package CPAN::SQLite::META::Module;
@@ -263,7 +281,7 @@ sub reload {
   my($self, %args) = @_;
   my $time = $args{time} || time;
   my $force = $args{force};
-  my $db_name = $CPAN::Config->{sqlite_dbname} || 'cpandb-sqlite';
+  my $db_name = $CPAN::SQLite::db_name;
   my $db = File::Spec->catfile($CPAN::Config->{cpan_home}, $db_name);
   my @args = ($^X, '-MCPAN::SQLite::META qw(setup update)', '-e');
   if (-f $db) {

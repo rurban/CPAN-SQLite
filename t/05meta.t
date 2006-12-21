@@ -50,16 +50,16 @@ for (@dirs) {
 
 foreach my $cpanid (keys %$auths) {
   my $auth = CPAN::Shell->expand("Author", $cpanid);
-  ok($auth->id, $cpanid);
+  is($auth->id, $cpanid);
   foreach (qw(fullname email)) {
     next unless $auths->{$cpanid}->{$_};
-    ok($auth->$_, $auths->{$cpanid}->{$_});
+    is($auth->$_, $auths->{$cpanid}->{$_});
   }
 }
 
 foreach my $mod_name (keys %$mods) {
   my $mod = CPAN::Shell->expand("Module", $mod_name);
-  ok($mod->id, $mod_name);
+  is($mod->id, $mod_name);
   like($mod->cpan_file, qr/$mods->{$mod_name}->{dist_name}/,
        $mods->{$mod_name}->{dist_name});
   next unless $mods->{$mod_name}->{mod_vers};
@@ -70,7 +70,7 @@ foreach my $mod_name (keys %$mods) {
 foreach my $mod_name (keys %$mods) {
   next unless ($mod_name =~ /^Bundle::/);
   my $bundle = CPAN::Shell->expand("Bundle", $mod_name);
-  ok($bundle->id, $mod_name);
+  is($bundle->id, $mod_name);
   like($bundle->cpan_file, qr/$mods->{$mod_name}->{dist_name}/,
        $mods->{$mod_name}->{dist_name});
   next unless $mods->{$mod_name}->{mod_vers};
@@ -79,9 +79,13 @@ foreach my $mod_name (keys %$mods) {
 }
 
 for my $dist_name(keys %$dists) {
-  my $dist = CPAN::Shell->expand("Distribution", "/\/$dist_name/");
-  ok($dist->id, $dists->{$dist_name}->{dist_file});
-  ok($dist->author, $dists->{$dist_name}->{cpanid});
+  my $dist_file = $dists->{$dist_name}->{dist_file};
+  my $cpanid = $dists->{$dist_name}->{cpanid};
+  my $query = "$cpanid/$dist_file";
+  my $dist = CPAN::Shell->expand("Distribution", $query);
+  my $dist_id = download($cpanid, $dists->{$dist_name}->{dist_file});
+  is($dist->id, $dist_id);
+  is($dist->author->id, $cpanid);
   my $mods = $dist->containsmods;
   foreach my $mod(keys %{$dists->{$dist_name}->{modules}}) {
     like($mod, qr/\b$mod\b/, $mod);

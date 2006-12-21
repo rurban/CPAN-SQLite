@@ -4,7 +4,7 @@ use warnings;
 use Test;
 use DBD::SQLite;
 BEGIN {plan tests => 6};
-my $db_name = 'cpandb-test';
+my $db_name = 'cpandb.sql';
 
 unlink($db_name) if (-e $db_name);
 

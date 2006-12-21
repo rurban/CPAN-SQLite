@@ -4,7 +4,7 @@ use base qw(CPAN::SQLite::DBI);
 
 use strict;
 use warnings;
-our $VERSION = '0.1_01';
+our $VERSION = '0.1_02';
 
 package CPAN::SQLite::DBI::Index::chaps;
 use base qw(CPAN::SQLite::DBI::Index);
@@ -37,6 +37,7 @@ sub fetch_ids {
     $versions->{$key} = $vers;
   }
   $sth->finish;
+  undef $sth;
   return ($ids, $versions);
 }
 
@@ -65,6 +66,7 @@ sub fetch_ids {
     $ids->{$key} = $id;
   }
   $sth->finish;
+  undef $sth;
   return $ids;
 }
 
@@ -97,6 +99,7 @@ sub create_index {
       return;
     };
     $sth->finish;
+    undef $sth;
   }
   return 1;
 }
@@ -110,6 +113,7 @@ sub drop_table {
     return;
   };
   $sth->finish;
+  undef $sth;
   return 1;
 }
 
@@ -123,6 +127,7 @@ sub create_table {
     return;
   };
   $sth->finish;
+  undef $sth;
   return 1;
 }
 

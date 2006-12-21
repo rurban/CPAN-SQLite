@@ -4,10 +4,13 @@ use warnings;
 use File::HomeDir;
 require File::Spec;
 use Cwd;
-our $VERSION = '0.1_01';
+require CPAN::SQLite::META;
+
+our $VERSION = '0.1_02';
 
 # an array ref of distributions to ignore indexing
 my $ignore = [qw(SpreadSheet-WriteExcel-WebPivot)];
+our $db_name = 'cpandb.sql';
 
 use constant WIN32 => $^O eq 'MSWin32';
 
@@ -15,7 +18,6 @@ sub new {
   my ($class, %args) = @_;
   my ($CPAN, $update_indices);
   my $db_dir = $args{db_dir};
-  my $db_name = $args{db_name};
   my $urllist = [];
   my $keep_source_where;
   eval {require CPAN; CPAN::HandleConfig->load;};
@@ -23,9 +25,6 @@ sub new {
     $CPAN = $CPAN::Config->{cpan_home};
     $db_dir = $CPAN;
     $keep_source_where = $CPAN::Config->{keep_source_where};
-    if (defined $CPAN::Config->{sqlite_dbname}) {
-      $db_name = $CPAN::Config->{sqlite_dbname};
-    }
     $urllist = $CPAN::Config->{urllist};
     die qq{The '$CPAN' directory doesn't exist} unless -d $CPAN;
     $update_indices = 0;
@@ -38,7 +37,6 @@ sub new {
       0 : 1;
   }
   push @$urllist, q{http://www.cpan.org/};
-  $db_name ||= 'cpandb-sqlite';
   $db_dir ||= cwd;
   my $self = {%args, CPAN => $CPAN, update_indices => $update_indices,
 	      db_name => $db_name, urllist => $urllist,
@@ -132,17 +130,13 @@ A fatal error results if such a directory isn't found.
 Updates to these index files are assumed here to be
 handled by C<CPAN.pm>.
 
-=item * C<db_name =E<gt> 'cpan-sqlite'>
-
-This is the name of the database that C<DBD::SQLite>
-will use. If not given, this defaults to C<cpandb-sqlite>.
-
 =item * C<db_dir =E<gt> '/path/to/db/dir'>
 
 This specifies the path to where the database file is
 found. If not given, it defaults to the
 C<cpan_home> directory of C<CPAN.pm>, if present, or to
-the directory in which the script was invoked.
+the directory in which the script was invoked. The name
+of the database file is C<cpandb.sql>.
 
 =back
 

@@ -2,8 +2,8 @@ use strict;
 use ExtUtils::MakeMaker;
 
 my @exe_files = map {"bin/$_"} qw(cpandb);
-my $goners = join ' ', qw(cpandb-test
-			  t/dot-cpan/cpandb-sqlite
+my $goners = join ' ', qw(cpandb.sql
+			  t/dot-cpan/cpandb.sql
 			  t/dot-cpan/FTPstats.yml
 			  t/dot-cpan/CPAN/MyConfig.pm
 			  t/dot-cpan/cpan_sqlite_log.*

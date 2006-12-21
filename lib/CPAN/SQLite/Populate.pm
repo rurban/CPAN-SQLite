@@ -12,7 +12,7 @@ use File::Path;
 
 our $dbh = $CPAN::SQLite::DBI::dbh;
 my ($setup);
-our $VERSION = '0.1_01';
+our $VERSION = '0.1_02';
 
 my %tbl2obj;
 $tbl2obj{$_} = __PACKAGE__ . '::' . $_ 
@@ -192,6 +192,7 @@ sub insert {
       };
   }
   $sth->finish();
+  undef $sth;
   $dbh->commit() or do {
     $cdbi->db_error();
     $self->{error_msg} = $cdbi->{error_msg};
@@ -228,6 +229,7 @@ sub update {
         return;
       };
     $sth->finish();
+    undef $sth;
   }
   $dbh->commit() or do {
     $cdbi->db_error();
@@ -313,6 +315,7 @@ sub insert {
     };
   }
   $sth->finish();
+  undef $sth;
   $dbh->commit() or do {
     $cdbi->db_error();
     $self->{error_msg} = $cdbi->{error_msg};
@@ -357,6 +360,7 @@ sub update {
 		    return;
 		  };
     $sth->finish();
+    undef $sth;
   }
   $dbh->commit() or do {
     $cdbi->db_error();
@@ -389,6 +393,7 @@ sub delete {
     };
   }
   $sth->finish();
+  undef $sth;
   $dbh->commit() or do {
     $cdbi->db_error();
     $self->{error_msg} = $cdbi->{error_msg};
@@ -468,6 +473,7 @@ sub insert {
     };
   }
   $sth->finish();
+  undef $sth;
   $dbh->commit() or do {
     $cdbi->db_error();
     $self->{error_msg} = $cdbi->{error_msg};
@@ -514,6 +520,7 @@ sub update {
 	return;
       };
     $sth->finish();
+    undef $sth;
   }
   $dbh->commit() or do {
     $cdbi->db_error();
@@ -542,6 +549,7 @@ sub delete {
       };
     }
     $sth->finish();
+    undef $sth;
   }
 
   $data = $self->{delete};
@@ -556,6 +564,7 @@ sub delete {
       print "Deleting $modname\n";
     }
     $sth->finish;
+    undef $sth;
   }
   $dbh->commit() or do {
     $cdbi->db_error();
@@ -625,6 +634,7 @@ sub insert {
     }
   }
   $sth->finish();
+  undef $sth;
   $dbh->commit() or do {
     $cdbi->db_error();
     $self->{error_msg} = $cdbi->{error_msg};
@@ -663,6 +673,7 @@ sub update {
       };
   }
   $sth->finish();
+  undef $sth;
 
   my @fields = qw(chapterid dist_id subchapter);
   $sth = $cdbi->sth_insert(\@fields);
@@ -682,6 +693,7 @@ sub update {
     }
   }
   $sth->finish();
+  undef $sth;
   $dbh->commit() or do {
     $cdbi->db_error();
     $self->{error_msg} = $cdbi->{error_msg};
@@ -713,6 +725,7 @@ sub delete {
     };
   }
   $sth->finish();
+  undef $sth;
   $dbh->commit() or do {
     $cdbi->db_error();
     $self->{error_msg} = $cdbi->{error_msg};
@@ -726,7 +739,10 @@ package CPAN::SQLite::Populate;
 sub db_error {
   my ($obj, $sth) = @_;
   return unless $dbh;
-  $sth->finish if $sth;
+  if ($sth) {
+    $sth->finish;
+    undef $sth;
+  }
   $obj->{error_msg} = q{Database error: } . $dbh->errstr;
 }
 
