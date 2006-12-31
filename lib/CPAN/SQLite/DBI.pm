@@ -3,7 +3,7 @@ use strict;
 use warnings;
 require File::Spec;
 use DBI;
-our $VERSION = '0.1_02';
+our $VERSION = '0.1_03';
 
 use base qw(Exporter);
 our ($dbh, $tables, @EXPORT_OK);
@@ -83,7 +83,6 @@ sub new {
     or die "Cannot connect to $db";
   $dbh->{AutoCommit} = 0;
   $dbh->func('RLIKE', 2, \&rlike, 'create_function');
-  $dbh->func(3000, 'busy_timeout');
 
   my $objs;
   foreach my $table (keys %$tables) {

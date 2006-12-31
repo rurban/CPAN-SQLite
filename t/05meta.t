@@ -33,11 +33,16 @@ eval { require CPAN::MyConfig;
 
 my $min_cpan_v = '1.88_64';
 my $actual_cpan_v = $CPAN::VERSION;
+
+# older CPAN::Version's seem to have problems with underscores
+$min_cpan_v =~ s/_//g;
+$actual_cpan_v =~ s/_//g if $actual_cpan_v;
+
 if ($@ or CPAN::Version->vcmp($actual_cpan_v, $min_cpan_v) < 0) {
   plan skip_all => qq{Need CPAN.pm version $min_cpan_v or higher};
 }
 else {
-  plan tests => 2535;
+  plan tests => 2514;
 }
 
 my $home = $CPAN::Config->{cpan_home};
@@ -58,6 +63,7 @@ foreach my $cpanid (keys %$auths) {
 }
 
 foreach my $mod_name (keys %$mods) {
+  next if $mod_name =~ /^Bundle/;
   my $mod = CPAN::Shell->expand("Module", $mod_name);
   is($mod->id, $mod_name);
   like($mod->cpan_file, qr/$mods->{$mod_name}->{dist_name}/,

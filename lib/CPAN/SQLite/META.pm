@@ -6,7 +6,7 @@ use base qw(Exporter);
 our @EXPORT_OK;
 @EXPORT_OK = qw(setup update);
 our $global_id;
-our $VERSION = '0.1_02';
+our $VERSION = '0.1_03';
 
 sub new {
   my ($class, $cpan_meta) = @_;
@@ -129,6 +129,7 @@ sub set_one {
   my $self = shift;
   my $cpan_sqlite = $self->{cpan_sqlite};
   my $id = $self->{id};
+  return if ($id =~ /^Bundle::/);
   my $class = $self->{class};
   $cpan_sqlite->{results} = {};
   $cpan_sqlite->query(mode => 'module', name => $id, meta_obj => $self);
@@ -172,9 +173,10 @@ sub set_many {
   my $self = shift;
   my $cpan_sqlite = $self->{cpan_sqlite};
   my $regex = $self->{regex};
-  unless ($regex =~ /^Bundle::/i) {
-    $regex = 'Bundle::' . $regex;
+  unless ($regex =~ /(^Bundle::|[\^\$\*\+\?\|])/i) {
+    $regex = '^Bundle::' . $regex;
   }
+  $regex = '^Bundle::' if $regex eq '^';
   $cpan_sqlite->{results} = [];
   $cpan_sqlite->query(mode => 'module', query => $regex, meta_obj => $self);
 }
@@ -283,6 +285,11 @@ sub reload {
   my $force = $args{force};
   my $db_name = $CPAN::SQLite::db_name;
   my $db = File::Spec->catfile($CPAN::Config->{cpan_home}, $db_name);
+  my $journal_file = $db . '-journal';
+  if (-f $journal_file) {
+    warn qq{Database locked - cannot update.};
+    return;
+  }
   my @args = ($^X, '-MCPAN::SQLite::META qw(setup update)', '-e');
   if (-f $db) {
     my $mtime_db = (stat(_))[9];

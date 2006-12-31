@@ -34,7 +34,7 @@ Perhaps the easiest way to set up and maintain the database is through
 the supplied cpandb script. If we assume that there is a CPAN.pm
 client available and configured, the database can be created via
    cpandb --setup
-which will create the database file cpandb-sqlite under the
+which will create the database file cpandb.sql under the
 "cpan_home" defined in CPAN::Config (this is the same location
 as where CPAN.pm's Metadata is found). Subsequent updates to
 the database can be done through
@@ -70,4 +70,3 @@ or directly to the author.
 This software is copyright 2006 by Randy Kobes
 <r.kobes@uwinnipeg.ca>. Use and
 redistribution are under the same terms as Perl itself.
-

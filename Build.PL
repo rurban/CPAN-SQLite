@@ -3,11 +3,11 @@ use warnings;
 use Module::Build;
 
 my @exe_files = map {"bin/$_"} qw(cpandb);
-my $goners = [qw(cpandb-test
-		 t/dot-cpan/cpandb-sqlite
+my $goners = [qw(cpandb.sql
+		 t/dot-cpan/cpandb.sql
 		 t/dot-cpan/FTPstats.yml
 		 t/dot-cpan/CPAN/MyConfig.pm
-		 t/dot-cpan/cpan_search_log.*
+		 t/dot-cpan/cpan_sqlite_log.*
 		)];
 my $prereqs = {'File::Spec' => 0,
                'Archive::Tar' => 1.08,

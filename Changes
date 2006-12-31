@@ -1,6 +1,17 @@
 Revision history for Perl extension CPAN::SQLite.
 
-0.1_02
+0.1_03 Dec 31, 2006
+  - in the t/05meta.t test, remove an underscore from the version
+    strings, as older versions of CPAN::Version seem to have
+    problems comparing versions with underscores.
+  - don't try to update database if a $db_name-journal file
+    exists, indicating another process is updating the database
+  - in a regex search for Bundles within CPAN::SQLite::META,
+    don't prepend 'Bundle' if special regex characters are
+    present, to help in tab completion of Bundles within CPAN.pm
+  - get tab completion within CPAN.pm working
+
+0.1_02 Dec 21, 2006
   - change name of database to cpandb.sql, and make it fixed,
     as there was little need to have it configureable.
   - support 

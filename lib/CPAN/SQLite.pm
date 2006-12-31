@@ -6,7 +6,7 @@ require File::Spec;
 use Cwd;
 require CPAN::SQLite::META;
 
-our $VERSION = '0.1_02';
+our $VERSION = '0.1_03';
 
 # an array ref of distributions to ignore indexing
 my $ignore = [qw(SpreadSheet-WriteExcel-WebPivot)];
@@ -232,7 +232,7 @@ information on all available packages into memory; if such
 a query is made, the subsequent memory footprint of CPAN.pm
 with and without CPAN::SQLite will be essentially the same.
 
-The database itself, called F<cpandb-sqlite>, will be stored
+The database itself, called F<cpandb.sql>, will be stored
 in the location specified by C<$CPAN::Config-E<gt>{cpan_home}>.
 When first started, this database will be created, and afterwards,
 it will be updated if the database is older than one day since

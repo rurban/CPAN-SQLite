@@ -3,7 +3,7 @@ use base qw(CPAN::SQLite::DBI);
 use CPAN::SQLite::DBI qw($tables $dbh);
 use CPAN::SQLite::Util qw($full_id);
 
-our $VERSION = '0.1_02';
+our $VERSION = '0.1_03';
 
 use strict;
 use warnings;
@@ -161,19 +161,28 @@ sub sql_statement {
   }
 
   my $sql = qq{SELECT $distinct } . join(',', @fields);
-  my $where;
+  my $where = '';
   my $type = $search->{type};
  QUERY: {
     ($type eq 'query' ) and do {
       my $value = $search->{value};
+      last QUERY if ($value eq '^');
       my $name = $search->{name};
       my $text = $search->{text};
-      my $use_like = ($value =~ /^\w+$/) ? 1 : 0;
+      my $use_like = ($value =~ /^\^?[A-Za-z0-9_\\\:\-]+$/) ? 1 : 0;
+      my $prepend = '%';
+      if ($use_like and $value =~ /^\^/) {
+	$prepend = '';
+	$value =~ s/^\^//;
+	$value =~ s{\\}{}g;
+      }
       $where = $use_like ?
-	qq{$name LIKE '%$value%'} : qq{RLIKE($name, '$value')};
+	qq{$name LIKE '$prepend$value%'} : 
+	  qq{RLIKE($name, '$value')};
       if ($name eq 'cpanid') {
 	$where .= $use_like ?
-	  qq{ OR $text LIKE '%$value%'} : qq{ OR RLIKE($text, '$value')};
+	  qq{ OR $text LIKE '$prepend$value%'} : 
+	    qq{ OR RLIKE($text, '$value')};
       }
       last QUERY;
     };
@@ -201,8 +210,13 @@ sub sql_statement {
     }
   }
 
-  $sql .= ' WHERE ( ' . $where . ' )';
-  $sql .= ' AND (' . $join . ')' if $join;
+  if ($where) {
+    $sql .= ' WHERE ( ' . $where . ' )';
+    $sql .= ' AND (' . $join . ')' if $join;
+  }
+  else {
+    $sql .= ' WHERE (' . $join . ')' if $join;
+  }
 
   my $order_by = '';
   if (my $user_order_by = $args{order_by}) {
