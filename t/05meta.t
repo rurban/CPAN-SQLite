@@ -42,8 +42,11 @@ if ($@ or CPAN::Version->vcmp($actual_cpan_v, $min_cpan_v) < 0) {
   plan skip_all => qq{Need CPAN.pm version $min_cpan_v or higher};
 }
 else {
-  plan tests => 2514;
+  plan tests => 2515;
 }
+
+# verify that we loaded the right CPAN::Config
+is($CPAN::Config->{QAZWSX}, 'PLMOKN');
 
 my $home = $CPAN::Config->{cpan_home};
 my $sources = $CPAN::Config->{keep_source_where};
@@ -55,7 +58,7 @@ for (@dirs) {
 
 foreach my $cpanid (keys %$auths) {
   my $auth = CPAN::Shell->expand("Author", $cpanid);
-  is($auth->id, $cpanid);
+  is($auth->id, $cpanid, "verify '$cpanid'");
   foreach (qw(fullname email)) {
     next unless $auths->{$cpanid}->{$_};
     is($auth->$_, $auths->{$cpanid}->{$_});
@@ -70,7 +73,7 @@ foreach my $mod_name (keys %$mods) {
        $mods->{$mod_name}->{dist_name});
   next unless $mods->{$mod_name}->{mod_vers};
   is($mod->cpan_version, $mods->{$mod_name}->{mod_vers},
-     "version $mods->{$mod_name}->{mod_vers}");
+     "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
 }
 
 foreach my $mod_name (keys %$mods) {
@@ -81,7 +84,7 @@ foreach my $mod_name (keys %$mods) {
        $mods->{$mod_name}->{dist_name});
   next unless $mods->{$mod_name}->{mod_vers};
   is($bundle->cpan_version, $mods->{$mod_name}->{mod_vers},
-     "version $mods->{$mod_name}->{mod_vers}");
+     "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
 }
 
 for my $dist_name(keys %$dists) {
@@ -106,7 +109,7 @@ for my $mod_search (qw(net ^uri::.*da)) {
          $mods->{$mod_name}->{dist_name});
     next unless $mods->{$mod_name}->{mod_vers};
     is($mod->cpan_version, $mods->{$mod_name}->{mod_vers},
-       "version $mods->{$mod_name}->{mod_vers}");
+       "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
   }
 }
 
@@ -118,7 +121,7 @@ for my $mod_search (qw(CPAN MP)) {
          $mods->{$mod_name}->{dist_name});
     next unless $mods->{$mod_name}->{mod_vers};
     is($bundle->cpan_version, $mods->{$mod_name}->{mod_vers},
-       "version $mods->{$mod_name}->{mod_vers}");
+       "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
   }
 }
 

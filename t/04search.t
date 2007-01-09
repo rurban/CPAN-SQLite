@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Test;
+use Test::More;
 use Cwd;
 use CPAN::SQLite::Search;
 use FindBin;
@@ -24,7 +24,7 @@ my $cdbi = CPAN::SQLite::DBI::Search->new(db_name => $db_name,
 my $query = CPAN::SQLite::Search->new(db_name => $db_name,
 				      db_dir => $db_dir);
 ok(defined $query);
-ok(ref($query), 'CPAN::SQLite::Search');
+isa_ok($query, 'CPAN::SQLite::Search');
 
 my $results;
 
@@ -32,9 +32,9 @@ for my $cpanid (keys %$auths) {
   $query->query(mode => 'author', name => $cpanid);
   $results = $query->{results};
   ok(defined $results);
-  ok($results->{cpanid}, $cpanid);
+  is($results->{cpanid}, $cpanid);
   for (qw(fullname email)) {
-    ok($results->{$_}, $auths->{$cpanid}->{$_});
+    is($results->{$_}, $auths->{$cpanid}->{$_});
   }
 }
 
@@ -42,21 +42,21 @@ for my $dist_name(keys %$dists) {
   $query->query(mode => 'dist', name => $dist_name);
   $results = $query->{results};
   ok(defined $results);
-  ok($results->{dist_name}, $dist_name);
+  is($results->{dist_name}, $dist_name);
   foreach (qw(dist_vers dist_file dist_abs dist_dslip cpanid)) {
     next unless $dists->{$dist_name}->{$_};
-    ok($results->{$_}, $dists->{$dist_name}->{$_});
+    is($results->{$_}, $dists->{$dist_name}->{$_});
   }
 }
 
 foreach my $mod_name (keys %$mods) {
   $query->query(mode => 'module', name => $mod_name);
   $results = $query->{results};
-  ok(defined $results); 
-  ok($results->{mod_name}, $mod_name);
+  ok(defined $results);
+  is($results->{mod_name}, $mod_name);
   foreach (qw(mod_abs chapterid dist_name dslip mod_vers)) {
     next unless $mods->{$mod_name}->{$_};
-    ok($results->{$_}, $mods->{$mod_name}->{$_});
+    is($results->{$_}, $mods->{$mod_name}->{$_});
   }
 }
 
@@ -71,8 +71,8 @@ for my $auth_search (qw(G G\w+A)) {
   $query->query(mode => 'author', query => $auth_search);
   $results = $query->{results};
   ok(defined $results);
-  ok(ref($results), 'ARRAY');
-  ok(scalar @$results, scalar @$auth_searches);
+  isa_ok($results, 'ARRAY');
+  is(scalar @$results, scalar @$auth_searches);
   compare_arrays($results, $auth_searches, \%keys);
 }
 
@@ -86,8 +86,8 @@ for my $dist_search(qw(apache test.*perl)) {
   $query->query(mode => 'dist', query => $dist_search);
   $results = $query->{results};
   ok(defined $results);
-  ok(ref($results), 'ARRAY');
-  ok(scalar @$results, scalar @$dist_searches);
+  isa_ok($results, 'ARRAY');
+  is(scalar @$results, scalar @$dist_searches);
   compare_arrays($results, $dist_searches, \%keys);
 }
 
@@ -101,8 +101,8 @@ for my $mod_search (qw(net ^uri::.*da)) {
   $query->query(mode => 'module', query => $mod_search);
   $results = $query->{results};
   ok(defined $results);
-  ok(ref($results), 'ARRAY');
-  ok(scalar @$results, scalar @$mod_searches);
+  isa_ok($results, 'ARRAY');
+  is(scalar @$results, scalar @$mod_searches);
   compare_arrays($results, $mod_searches, \%keys);
 }
 
@@ -130,13 +130,13 @@ sub compare_arrays {
       my $flag = 0;
       for (my $j=0; $j<$N; $j++) {
         if ($y->[$j]->{$key} and $x->[$i]->{$key} eq $y->[$j]->{$key}) {
-	  ok(1, 1, "Found matching $key");
+	  pass("Found matching $key");
 	  $flag++;
 	  last;
 	}
       }
       unless ($flag) {
-	ok(0, 1, qq{Matching $key not found});
+	fail(qq{Matching $key not found});
       }
     }
   }

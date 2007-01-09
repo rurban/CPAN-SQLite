@@ -10,7 +10,7 @@ use File::Basename;
 use File::Path;
 use LWP::Simple qw(getstore is_success);
 
-our $VERSION = '0.1_03';
+our $VERSION = '0.1_04';
 
 our ($oldout);
 my $log_file = 'cpan_sqlite_log.' . time;

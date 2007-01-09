@@ -1,5 +1,12 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.1_04 Jan 11, 2007
+  - improve diagnostics of some of the tests using Test::More
+  - check that we loaded the correct CPAN::Config in 05meta.t
+    (test suggested by Andreas Koenig)
+  - add auto_commit variable to the test's CPAN::Config, so
+    as to work with CPAN.pm 1.88_69
+
 0.1_03 Dec 31, 2006
   - in the t/05meta.t test, remove an underscore from the version
     strings, as older versions of CPAN::Version seem to have

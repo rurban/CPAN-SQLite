@@ -3,7 +3,7 @@ use base qw(CPAN::SQLite::DBI);
 use CPAN::SQLite::DBI qw($tables $dbh);
 use CPAN::SQLite::Util qw($full_id);
 
-our $VERSION = '0.1_03';
+our $VERSION = '0.1_04';
 
 use strict;
 use warnings;
