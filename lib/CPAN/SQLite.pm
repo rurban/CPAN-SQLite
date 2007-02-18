@@ -6,7 +6,7 @@ require File::Spec;
 use Cwd;
 require CPAN::SQLite::META;
 
-our $VERSION = '0.1_04';
+our $VERSION = '0.1';
 
 # an array ref of distributions to ignore indexing
 my $ignore = [qw(SpreadSheet-WriteExcel-WebPivot)];
@@ -101,7 +101,8 @@ searching a CPAN database consisting of the information
 stored in the three main CPAN indices: 
 F<$CPAN/modules/03modlist.data.gz>,
 F<$CPAN/modules/02packages.details.txt.gz>, and
-F<$CPAN/authors/01mailrc.txt.gz>.
+F<$CPAN/authors/01mailrc.txt.gz>. It should be
+considered at an alpha stage of development.
 
 One begins by creating the object as
 
@@ -251,7 +252,7 @@ command-line interface to the
 indexing and querying of the database.
 
 Development takes place on the CPAN-Search-Lite project
-at L<http://sourceforge.net/projects/cpan-search/>.
+at L<http://cpan-search.svn.sourceforge.net/viewvc/cpan-search/CPAN-SQLite/>.
 
 =head1 SUPPORT
 
@@ -284,6 +285,21 @@ L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPAN-SQLite>
 L<http://search.cpan.org/dist/CPAN-SQLite>
 
 =back
+
+=head1 BUGS
+
+At this time, CPAN::SQLite keeps information contained only
+in the latest version of a CPAN distribution. This means that
+modules that are provided only in older versions of a CPAN
+distribution will not be present in the database; for example,
+at this time, the latest version of the I<libwww-perl> distribution
+on CPAN is 5.805, but there are modules such as I<URI::URL::finger>
+contained in version 5.10 of libwww-perl that are not present in 5.805.
+This behaviour differs from that of L<CPAN> without CPAN::SQLite.
+This may change in the future.
+
+Please report bugs and feature requests via
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPAN-SQLite>.
 
 =head1 COPYRIGHT
 

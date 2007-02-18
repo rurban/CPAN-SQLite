@@ -4,7 +4,7 @@ use base qw(CPAN::SQLite::DBI);
 
 use strict;
 use warnings;
-our $VERSION = '0.1_04';
+our $VERSION = '0.1';
 
 package CPAN::SQLite::DBI::Index::chaps;
 use base qw(CPAN::SQLite::DBI::Index);

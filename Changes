@@ -1,5 +1,8 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.1  Feb 17, 2007
+  - first non-developer release; no code changes from 0.1_04
+
 0.1_04 Jan 11, 2007
   - improve diagnostics of some of the tests using Test::More
   - check that we loaded the correct CPAN::Config in 05meta.t

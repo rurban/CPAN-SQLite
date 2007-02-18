@@ -8,6 +8,9 @@ my $goners = [qw(cpandb.sql
 		 t/dot-cpan/FTPstats.yml
 		 t/dot-cpan/CPAN/MyConfig.pm
 		 t/dot-cpan/cpan_sqlite_log.*
+		 t/dot-cpan/sources/authors/01mailrc.txt.gz
+		 t/dot-cpan/sources/modules/02packages.details.txt.gz
+		 t/dot-cpan/sources/modules/03modlist.data.gz
 		)];
 my $prereqs = {'File::Spec' => 0,
                'Archive::Tar' => 1.08,
