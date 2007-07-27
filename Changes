@@ -1,5 +1,11 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.15 July 26, 2007
+  - add a message of when the database was last updated:
+      http://rt.cpan.org/Ticket/Display.html?id=27953
+  - don't ignore a previously set PERL5LIB in the tests:
+      http://rt.cpan.org/Ticket/Display.html?id=28297
+
 0.1  Feb 17, 2007
   - first non-developer release; no code changes from 0.1_04
 

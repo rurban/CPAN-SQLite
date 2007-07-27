@@ -6,7 +6,7 @@ use base qw(Exporter);
 our @EXPORT_OK;
 @EXPORT_OK = qw(setup update);
 our $global_id;
-our $VERSION = '0.1';
+our $VERSION = '0.15';
 
 sub new {
   my ($class, $cpan_meta) = @_;
@@ -189,6 +189,9 @@ sub set_data {
 
 package CPAN::SQLite::META;
 
+my @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+my @days = qw(Sun Mon Tue Wed Thu Fri Sat);
+
 sub set_author {
   my ($self, $id, $results) = @_;
   my $class = 'CPAN::Author';
@@ -293,6 +296,8 @@ sub reload {
   my @args = ($^X, '-MCPAN::SQLite::META qw(setup update)', '-e');
   if (-f $db) {
     my $mtime_db = (stat(_))[9];
+    my $time_string = gmtime_string($mtime_db);
+    warn "Database was generated on $time_string\n";
     unless ($force) {
       return if ($time - $mtime_db < 86400);
     }
@@ -319,6 +324,16 @@ sub setup {
 sub update {
   my $obj = CPAN::SQLite->new();
   $obj->index();
+}
+
+sub gmtime_string {
+  my $time = shift;
+  return unless $time;
+  my @a = gmtime($time);
+  my $string = sprintf("%s, %02d %s %d %02d:%02d:%02d GMT",
+		      $days[$a[6]], $a[3], $months[$a[4]],
+		      $a[5] + 1900, $a[2], $a[1], $a[0]);
+  return $string;
 }
 
 1;
