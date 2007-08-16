@@ -4,7 +4,7 @@ use base qw(CPAN::SQLite::DBI);
 
 use strict;
 use warnings;
-our $VERSION = '0.1';
+our $VERSION = '0.18';
 
 package CPAN::SQLite::DBI::Index::chaps;
 use base qw(CPAN::SQLite::DBI::Index);
@@ -94,7 +94,7 @@ sub create_index {
     my $sql = 'CREATE INDEX ' . $id_name . ' ON ' .
       $table . '( ' . $index . ' )';
     my $sth = $dbh->prepare($sql);
-    $dbh->do($sql) or do {
+    $sth->execute() or do {
       $self->db_error($sth);
       return;
     };
@@ -106,12 +106,17 @@ sub create_index {
 
 sub drop_table {
   my $self = shift;
-  my $sql = q{DROP TABLE if exists } . $self->{table};
+  my $table = $self->{table};
+  my $sql = qq{SELECT name FROM sqlite_master } .
+    qq{ WHERE type='table' AND name=?};
   my $sth = $dbh->prepare($sql);
-  $dbh->do($sql) or do {
-    $self->db_error($sth);
-    return;
-  };
+  $sth->execute($table);
+  if (defined $sth->fetchrow_array) {
+    $dbh->do(qq{drop table $table)}) or do {
+      $self->db_error($sth);
+      return;
+    };
+  }
   $sth->finish;
   undef $sth;
   return 1;

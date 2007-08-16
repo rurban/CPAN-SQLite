@@ -10,7 +10,7 @@ use FindBin;
 use CPAN::DistnameInfo;
 use CPAN::SQLite::Util qw(download);
 use lib "$FindBin::Bin/lib";
-use TestSQL qw($mods $auths $dists has_hash_data);
+use TestSQL qw($mods $auths $dists has_hash_data vcmp);
 my $cwd = cwd;
 my $path_sep = $Config{path_sep} || ':';
 $ENV{PERL5LIB} = join $path_sep, 
@@ -55,6 +55,8 @@ for (@dirs) {
   next if -d $_;
   mkpath($_) or die qq{Cannot mkpath $_: $!};
 }
+my $db = File::Spec->catfile($home, 'cpandb.sql');
+unlink($db) if -e $db;
 
 foreach my $cpanid (keys %$auths) {
   my $auth = CPAN::Shell->expand("Author", $cpanid);
@@ -72,7 +74,7 @@ foreach my $mod_name (keys %$mods) {
   like($mod->cpan_file, qr/$mods->{$mod_name}->{dist_name}/,
        $mods->{$mod_name}->{dist_name});
   next unless $mods->{$mod_name}->{mod_vers};
-  is($mod->cpan_version, $mods->{$mod_name}->{mod_vers},
+  is(vcmp($mod->cpan_version, $mods->{$mod_name}->{mod_vers}), 0,
      "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
 }
 
@@ -83,7 +85,7 @@ foreach my $mod_name (keys %$mods) {
   like($bundle->cpan_file, qr/$mods->{$mod_name}->{dist_name}/,
        $mods->{$mod_name}->{dist_name});
   next unless $mods->{$mod_name}->{mod_vers};
-  is($bundle->cpan_version, $mods->{$mod_name}->{mod_vers},
+  is(vcmp($bundle->cpan_version, $mods->{$mod_name}->{mod_vers}), 0,
      "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
 }
 
@@ -108,7 +110,7 @@ for my $mod_search (qw(net ^uri::.*da)) {
     like($mod->cpan_file, qr/$mods->{$mod_name}->{dist_name}/,
          $mods->{$mod_name}->{dist_name});
     next unless $mods->{$mod_name}->{mod_vers};
-    is($mod->cpan_version, $mods->{$mod_name}->{mod_vers},
+    is(vcmp($mod->cpan_version, $mods->{$mod_name}->{mod_vers}), 0,
        "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
   }
 }
@@ -120,7 +122,7 @@ for my $mod_search (qw(CPAN MP)) {
     like($bundle->cpan_file, qr/$mods->{$mod_name}->{dist_name}/,
          $mods->{$mod_name}->{dist_name});
     next unless $mods->{$mod_name}->{mod_vers};
-    is($bundle->cpan_version, $mods->{$mod_name}->{mod_vers},
+    is(vcmp($bundle->cpan_version, $mods->{$mod_name}->{mod_vers}), 0,
        "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
   }
 }
@@ -167,6 +169,7 @@ foreach my $type(qw(Author Distribution Module)) {
 }
 
 rmtree($sources) if -d $sources;
+unlink($db) if -e $db;
 
 # Local Variables:
 # mode: cperl

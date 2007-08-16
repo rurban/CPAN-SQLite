@@ -7,7 +7,7 @@ use CPAN::SQLite::Search;
 use FindBin;
 use File::Spec::Functions;
 use lib "$FindBin::Bin/lib";
-use TestSQL qw($dists $mods $auths);
+use TestSQL qw($dists $mods $auths vcmp);
 use CPAN::SQLite::DBI::Search;
 use CPAN::SQLite::DBI qw($dbh);
 
@@ -43,10 +43,12 @@ for my $dist_name(keys %$dists) {
   $results = $query->{results};
   ok(defined $results);
   is($results->{dist_name}, $dist_name);
-  foreach (qw(dist_vers dist_file dist_abs dist_dslip cpanid)) {
+  foreach (qw(dist_file dist_abs dist_dslip cpanid)) {
     next unless $dists->{$dist_name}->{$_};
     is($results->{$_}, $dists->{$dist_name}->{$_});
   }
+  next unless $dists->{$dist_name}->{dist_vers};
+  is(vcmp($results->{dist_vers}, $dists->{$dist_name}->{dist_vers}), 0);
 }
 
 foreach my $mod_name (keys %$mods) {
@@ -54,10 +56,12 @@ foreach my $mod_name (keys %$mods) {
   $results = $query->{results};
   ok(defined $results);
   is($results->{mod_name}, $mod_name);
-  foreach (qw(mod_abs chapterid dist_name dslip mod_vers)) {
+  foreach (qw(mod_abs chapterid dist_name dslip)) {
     next unless $mods->{$mod_name}->{$_};
     is($results->{$_}, $mods->{$mod_name}->{$_});
   }
+  next unless $mods->{$mod_name}->{mod_vers};
+  is(vcmp($results->{mod_vers}, $mods->{$mod_name}->{mod_vers}), 0);
 }
 
 my %keys = map {$_ => 1} qw(email fullname);
@@ -129,10 +133,15 @@ sub compare_arrays {
       next unless $x->[$i]->{$key};
       my $flag = 0;
       for (my $j=0; $j<$N; $j++) {
-        if ($y->[$j]->{$key} and $x->[$i]->{$key} eq $y->[$j]->{$key}) {
-	  pass("Found matching $key");
-	  $flag++;
-	  last;
+        if ($y->[$j]->{$key}) {
+	  my $test = ($key =~ /vers$/) ?
+	    (vcmp($x->[$i]->{$key}, $y->[$j]->{$key}) == 0) :
+	      $x->[$i]->{$key} eq $y->[$j]->{$key};
+	  if ($test) {
+	    pass("Found matching $key");
+	    $flag++;
+	    last;
+	  }
 	}
       }
       unless ($flag) {
@@ -141,3 +150,4 @@ sub compare_arrays {
     }
   }
 }
+

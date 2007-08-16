@@ -1,5 +1,12 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.18 Aug 15, 2007
+  - as some older versions of DBD::SQLite don't support
+    "drop table if exists $table", use an alternate construction
+  - add vcmp function in TestSQL.pm to test equality of versions
+  - when testing with CPAN.pm, remove the database file
+    before testing
+
 0.15 July 26, 2007
   - add a message of when the database was last updated:
       http://rt.cpan.org/Ticket/Display.html?id=27953
