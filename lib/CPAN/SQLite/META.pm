@@ -6,7 +6,7 @@ use base qw(Exporter);
 our @EXPORT_OK;
 @EXPORT_OK = qw(setup update);
 our $global_id;
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 sub new {
   my ($class, $cpan_meta) = @_;
@@ -110,17 +110,6 @@ sub set_list_data {
   $global_id = undef;
 }
 
-sub extract_distinfo {
-  my ($self, $pathname) = @_;
-  unless ($pathname =~ m{^\w/\w\w/}) {
-    $pathname =~ s{^(\w)(\w)(.*)}{$1/$1$2/$1$2$3};
-  }
-  my $d = CPAN::DistnameInfo->new($pathname);
-  my $dist = $d->dist;
-  my $download = download($d->cpanid, $d->filename);
-  return ($dist and $download) ? ($dist, $download) : undef;
-}
-
 package CPAN::SQLite::META::Module;
 use base qw(CPAN::SQLite::META);
 use CPAN::SQLite::Util qw(has_hash_data);
@@ -148,7 +137,14 @@ sub set_many {
 sub set_data {
   my ($self, $results) = @_;
   $self->set_module($results->{mod_name}, $results);
+  $global_id = $results->{download};
   $self->set_dist($results->{download}, $results);
+}
+
+sub set_list_data {
+  my ($self, $results) = @_;
+  $self->set_containsmods($results);
+  $global_id = undef;
 }
 
 package CPAN::SQLite::META::Bundle;
@@ -184,10 +180,18 @@ sub set_many {
 sub set_data {
   my ($self, $results) = @_;
   $self->set_bundle($results->{mod_name}, $results);
+  $global_id = $results->{download};
   $self->set_dist($results->{download}, $results);
 }
 
+sub set_list_data {
+  my ($self, $results) = @_;
+  $self->set_containsmods($results);
+  $global_id = undef;
+}
+
 package CPAN::SQLite::META;
+use CPAN::SQLite::Util qw(download);
 
 my @months = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
 my @days = qw(Sun Mon Tue Wed Thu Fri Sat);
@@ -334,6 +338,17 @@ sub gmtime_string {
 		      $days[$a[6]], $a[3], $months[$a[4]],
 		      $a[5] + 1900, $a[2], $a[1], $a[0]);
   return $string;
+}
+
+sub extract_distinfo {
+  my ($self, $pathname) = @_;
+  unless ($pathname =~ m{^\w/\w\w/}) {
+    $pathname =~ s{^(\w)(\w)(.*)}{$1/$1$2/$1$2$3};
+  }
+  my $d = CPAN::DistnameInfo->new($pathname);
+  my $dist = $d->dist;
+  my $download = download($d->cpanid, $d->filename);
+  return ($dist and $download) ? ($dist, $download) : undef;
 }
 
 1;

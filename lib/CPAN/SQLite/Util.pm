@@ -1,7 +1,7 @@
 package CPAN::SQLite::Util;
 use strict;
 use warnings;
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 use base qw(Exporter);
 our (@EXPORT_OK, %chaps, %modes,
@@ -9,7 +9,7 @@ our (@EXPORT_OK, %chaps, %modes,
 @EXPORT_OK = qw(%chaps $repositories %modes
                 vcmp $table_id $query_info $mode_info $full_id
 		has_hash_data has_array_data $dslip
-                expand_dslip download chap_desc);
+                expand_dslip download chap_desc print_debug);
 
 make_ids();
 
@@ -184,6 +184,11 @@ sub download {
 sub chap_desc {
   my ($id) = @_;
   return $chaps{$id};
+}
+
+sub print_debug {
+  return unless $ENV{CPAN_SQLITE_DEBUG};
+  print @_;
 }
 
 sub vcmp {

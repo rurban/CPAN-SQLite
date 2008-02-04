@@ -4,7 +4,7 @@ use base qw(CPAN::SQLite::DBI);
 
 use strict;
 use warnings;
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 package CPAN::SQLite::DBI::Index::chaps;
 use base qw(CPAN::SQLite::DBI::Index);
@@ -156,7 +156,7 @@ sub sth_insert {
   my $vals = join ',', map '?', @$fields;
   my $sql = sprintf(qq{INSERT INTO %s (%s) VALUES (%s)},
                     $self->{table}, $flds, $vals);
-  
+
   my $sth = $dbh->prepare($sql) or do {
     $self->db_error();
     return;

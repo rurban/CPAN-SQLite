@@ -10,7 +10,8 @@ use File::Basename;
 use File::Path;
 use LWP::Simple qw(getstore is_success);
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
+$ENV{CPAN_SQLITE_DEBUG} = 1;
 
 our ($oldout);
 my $log_file = 'cpan_sqlite_log.' . time;
@@ -20,7 +21,7 @@ sub new {
   if ($args{setup} and $args{reindex}) {
     die "Reindexing must be done on an exisiting database";
   }
-  
+
   my $self = {index => undef, state => undef, %args};
   bless $self, $class;
 }

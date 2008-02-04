@@ -17,7 +17,10 @@ $ENV{PERL5LIB} = join $path_sep,
   (File::Spec->catdir($cwd, qw(t dot-cpan)),
    map {File::Spec->catdir($cwd, 'blib', $_)} qw(arch lib) ), $ENV{PERL5LIB};
 # so that a real $HOME/.cpan isn't used
-$ENV{HOME} = File::Spec->catdir($cwd, qw(t));
+$ENV{HOME} = File::Spec->catdir($cwd, qw(t dot-cpan));
+# hack to get tests to pass on Darwin, as File::HomeDir
+# doesn't use HOME or PERL5LIB to specify where CPAN::MyConfig lives
+$ENV{CPAN_SQLITE_TESTING} = 1;
 
 my $from = File::Spec->catfile($cwd, qw(t dot-cpan CPAN TestConfig.pm));
 my $to = File::Spec->catfile($cwd, qw(t dot-cpan CPAN MyConfig.pm));

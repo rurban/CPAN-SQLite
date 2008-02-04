@@ -2,7 +2,7 @@ package CPAN::SQLite::Populate;
 use strict;
 use warnings;
 no warnings qw(redefine);
-use CPAN::SQLite::Util qw($table_id has_hash_data);
+use CPAN::SQLite::Util qw($table_id has_hash_data print_debug);
 use CPAN::SQLite::DBI::Index;
 use CPAN::SQLite::DBI qw($dbh);
 use File::Find;
@@ -12,7 +12,7 @@ use File::Path;
 
 our $dbh = $CPAN::SQLite::DBI::dbh;
 my ($setup);
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 my %tbl2obj;
 $tbl2obj{$_} = __PACKAGE__ . '::' . $_ 
@@ -117,12 +117,12 @@ sub populate_tables {
       my $obj = $self->{obj}->{$table};
       unless ($obj->$method()) {
 	if (my $error = $obj->{error_msg}) {
-	  print "Fatal error from ", ref($obj), ": ", $error, $/;
+	  print_debug("Fatal error from ", ref($obj), ": ", $error, $/);
 	  return;
 	}
 	else {
 	  my $info = $obj->{info_msg};
-	  print "Info from ", ref($obj), ": ", $info, $/;
+	  print_debug("Info from ", ref($obj), ": ", $info, $/);
 	}
       }
     }
@@ -132,7 +132,7 @@ sub populate_tables {
 
 package CPAN::SQLite::Populate::auths;
 use base qw(CPAN::SQLite::Populate);
-use CPAN::SQLite::Util qw(has_hash_data);
+use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
   my ($class, %args) = @_;
@@ -177,7 +177,7 @@ sub insert {
   foreach my $cpanid (keys %$data) {
     my $values = $info->{$cpanid};
     next unless ($values and $cpanid);
-    print "Inserting author $cpanid\n";
+    print_debug("Inserting author $cpanid\n");
     $sth->execute($cpanid, $values->{email}, $values->{fullname})
       or do {
         $cdbi->db_error($sth);
@@ -217,7 +217,7 @@ sub update {
   my $info = $self->{info};
   my @fields = qw(cpanid email fullname);
   foreach my $cpanid (keys %$data) {
-    print "Updating author $cpanid\n";
+    print_debug("Updating author $cpanid\n");
     next unless $data->{$cpanid};
     my $sth = $cdbi->sth_update(\@fields, $data->{$cpanid});
     my $values = $info->{$cpanid};
@@ -247,7 +247,7 @@ sub delete {
 
 package CPAN::SQLite::Populate::dists;
 use base qw(CPAN::SQLite::Populate);
-use CPAN::SQLite::Util qw(has_hash_data);
+use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
   my ($class, %args) = @_;
@@ -300,7 +300,7 @@ sub insert {
     my $values = $dists->{$distname};
     my $cpanid = $values->{cpanid};
     next unless ($values and $cpanid and $auth_ids->{$cpanid});
-    print "Inserting $distname of $cpanid\n";
+    print_debug("Inserting $distname of $cpanid\n");
     $sth->execute($auth_ids->{$values->{cpanid}}, $distname,
 		    $values->{dist_file}, $values->{dist_vers},
 		    $values->{dist_abs}, $values->{dslip}) or do {
@@ -351,7 +351,7 @@ sub update {
     my $values = $dists->{$distname};
     my $cpanid = $values->{cpanid};
     next unless ($values and $cpanid and $auth_ids->{$cpanid});
-    print "Updating $distname of $cpanid\n";
+    print_debug("Updating $distname of $cpanid\n");
     $sth->execute($auth_ids->{$values->{cpanid}}, $distname, 
 		  $values->{dist_file}, $values->{dist_vers}, 
 		  $values->{dist_abs}, $values->{dslip}) or do {
@@ -385,7 +385,7 @@ sub delete {
 
   my $sth = $cdbi->sth_delete('dist_id');
   foreach my $distname(keys %$data) {
-    print "Deleting $distname\n";
+    print_debug("Deleting $distname\n");
     $sth->execute($data->{$distname}) or do {
       $cdbi->db_error($sth);
       $self->{error_msg} = $cdbi->{error_msg};
@@ -404,7 +404,7 @@ sub delete {
 
 package CPAN::SQLite::Populate::mods;
 use base qw(CPAN::SQLite::Populate);
-use CPAN::SQLite::Util qw(has_hash_data);
+use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
   my ($class, %args) = @_;
@@ -507,7 +507,7 @@ sub update {
 
   foreach my $modname (keys %$data) {
     next unless $data->{$modname};
-    print "Updating $modname\n";
+    print_debug("Updating $modname\n");
     my $sth = $cdbi->sth_update(\@fields, $data->{$modname});
     my $values = $mods->{$modname};
     next unless ($values and $dist_ids->{$values->{dist_name}});
@@ -561,7 +561,7 @@ sub delete {
         $self->{error_msg} = $cdbi->{error_msg};
         return;
       };
-      print "Deleting $modname\n";
+      print_debug("Deleting $modname\n");
     }
     $sth->finish;
     undef $sth;
@@ -576,7 +576,7 @@ sub delete {
 
 package CPAN::SQLite::Populate::chaps;
 use base qw(CPAN::SQLite::Populate);
-use CPAN::SQLite::Util qw(has_hash_data);
+use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
   my ($class, %args) = @_;

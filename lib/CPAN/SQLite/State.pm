@@ -4,8 +4,8 @@ use warnings;
 no warnings qw(redefine);
 use CPAN::SQLite::DBI qw($dbh);
 use CPAN::SQLite::DBI::Index;
-use CPAN::SQLite::Util qw(has_hash_data);
-our $VERSION = '0.18';
+use CPAN::SQLite::Util qw(has_hash_data print_debug);
+our $VERSION = '0.19';
 
 my %tbl2obj;
 $tbl2obj{$_} = __PACKAGE__ . '::' . $_ for (qw(dists mods auths));
@@ -40,11 +40,11 @@ sub new {
 sub state {
   my $self = shift;
   unless ($self->create_objs()) {
-    print "Cannot create objects";
+    print_debug("Cannot create objects");
     return;
   }
   unless ($self->state_info()) {
-    print "Getting state information failed";
+    print_debug("Getting state information failed");
     return;
   };
   return 1;
@@ -90,12 +90,12 @@ sub state_info {
       my $obj = $self->{obj}->{$table};
       unless ($obj->$method()) {
 	if (my $error = $obj->{error_msg}) {
-	  print "Fatal error from ", ref($obj), ": ", $error, $/;
+	  print_debug("Fatal error from ", ref($obj), ": ", $error, $/);
 	  return;
 	}
 	else {
 	  my $info = $obj->{info_msg};
-	  print "Info from ", ref($obj), ": ", $info, $/;
+	  print_debug("Info from ", ref($obj), ": ", $info, $/);
 	}
       }
     }
@@ -105,7 +105,7 @@ sub state_info {
 
 package CPAN::SQLite::State::auths;
 use base qw(CPAN::SQLite::State);
-use CPAN::SQLite::Util qw(has_hash_data);
+use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
   my ($class, %args) = @_;
@@ -175,7 +175,7 @@ sub state {
 
 package CPAN::SQLite::State::dists;
 use base qw(CPAN::SQLite::State);
-use CPAN::SQLite::Util qw(vcmp has_hash_data);
+use CPAN::SQLite::Util qw(vcmp has_hash_data print_debug);
 
 sub new {
   my ($class, %args) = @_;
@@ -223,7 +223,7 @@ sub state {
     foreach my $distname(@dists) {
       my $id = $dist_ids->{$distname};
       if (not defined $id) {
-        print STDERR qq{"$distname" does not have an id: reindexing ignored\n};
+        print_debug(qq{"$distname" does not have an id: reindexing ignored\n});
         next;
       }
       $update->{$distname} = $id;
@@ -246,7 +246,7 @@ sub state {
   foreach my $distname(keys %$dist_versions) {
     next if $dists->{$distname};
     $delete->{$distname} = $dist_ids->{$distname};
-    print "Will delete $distname\n";
+    print_debug("Will delete $distname\n");
   }
   $self->{delete} = $delete;
   return 1;
@@ -254,7 +254,7 @@ sub state {
 
 package CPAN::SQLite::State::mods;
 use base qw(CPAN::SQLite::State);
-use CPAN::SQLite::Util qw(has_hash_data);
+use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
   my ($class, %args) = @_;

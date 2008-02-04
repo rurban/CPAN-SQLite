@@ -6,7 +6,7 @@ require File::Spec;
 use Cwd;
 require CPAN::SQLite::META;
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 # an array ref of distributions to ignore indexing
 my $ignore = [qw(SpreadSheet-WriteExcel-WebPivot)];
@@ -20,6 +20,11 @@ sub new {
   my $db_dir = $args{db_dir};
   my $urllist = [];
   my $keep_source_where;
+  # for testing undr Darwin, must load CPAN::MyConfig contained
+  # in PERL5LIB, as File::HomeDir doesn't use this
+  if ($ENV{CPAN_SQLITE_TESTING}) {
+    eval {require CPAN::MyConfig;};
+  }
   eval {require CPAN; CPAN::HandleConfig->load;};
   if ( not $@ and not defined $args{CPAN} ) {
     $CPAN = $CPAN::Config->{cpan_home};
@@ -301,9 +306,15 @@ This may change in the future.
 Please report bugs and feature requests via
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPAN-SQLite>.
 
+=head1 ENVIRONMENT VARIABLES
+
+Information messages from the indexing procedures are printed
+out to STDOUT if the environment variable CPAN_SQLITE_DEBUG
+is set. This is automatically set within L<CPAN::SQLite::Index>.
+
 =head1 COPYRIGHT
 
-This software is copyright 2006 by Randy Kobes
+This software is copyright 2006,2008 by Randy Kobes
 E<lt>r.kobes@uwinnipeg.caE<gt>. Use and
 redistribution are under the same terms as Perl itself.
 

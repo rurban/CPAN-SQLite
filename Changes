@@ -1,5 +1,18 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.19 Feb 3, 2008
+  - fix bug whereby a query for a module, followed by a query for
+    the distribution containing that module, would only list the
+    module first queried for CONTAINSMODS
+  - fix (hopefully) failing tests on Darwin:
+       http://rt.cpan.org/Ticket/Display.html?id=28890
+    resulting from CPAN::MyConfig not getting picked up
+    from PERL5LIB (thanks to Michael Schwern and David Wheeler)
+  - have information messages printed out only if CPAN_SQLITE_DEBUG
+    is set, as requested at
+       http://rt.cpan.org/Ticket/Display.html?id=32740
+    (thanks to ZOFFIX)
+
 0.18 Aug 15, 2007
   - as some older versions of DBD::SQLite don't support
     "drop table if exists $table", use an alternate construction

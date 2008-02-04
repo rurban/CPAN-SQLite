@@ -7,7 +7,7 @@ use CPAN::SQLite::Util qw($mode_info);
 use CPAN::SQLite::DBI::Search;
 
 our $max_results = 0;
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 my $cdbi_query;
 
 my %mode2obj;
@@ -163,8 +163,40 @@ sub search {
   }
   my $results;
   return unless $results = ($meta_obj ? 
-			    $cdbi->fetch_and_set(%args) :
+			    $cdbi->fetch_and_set(%args, want_ids => 1) :
 			    $cdbi->fetch(%args));
+# if running under CPAN.pm, need to build a list of modules
+# contained in the distribution
+  if ($meta_obj) {
+    $args{join} = undef;
+    $args{table} = 'mods';
+    my @items = (ref($results) eq 'ARRAY') ? @$results : ($results);
+    foreach my $item(@items) {
+      $args{fields} = [ qw(dist_id) ];
+      $args{join} = { dists => 'dist_id',
+		    };
+      $args{order_by} = undef;
+      my $search = {id => 'mod_id',
+		    value => $item->{mod_id},
+		    type => 'id',
+		   };
+      my $ids = $cdbi->fetch(%args,
+			     search => $search);
+
+      $args{fields} = [ qw(mod_name mod_abs) ];
+      $args{order_by} = 'mod_name';
+      $args{join} = undef;
+      $search = {id => 'dist_id',
+		 value => $ids->{dist_id},
+		 type => 'id',
+		 wantarray => 1,
+		};
+      my $mods;
+      next unless $mods = $cdbi->fetch_and_set(%args, 
+					       search => $search,
+					       set_list => 1);
+    }
+  }
   unless ($meta_obj) {
     $self->{results} =
       (ref($results) eq 'ARRAY' and scalar @$results == 1) ?

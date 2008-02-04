@@ -6,9 +6,9 @@ use File::Spec::Functions qw(catfile);
 use Compress::Zlib;
 use File::Basename;
 use Safe;
-use CPAN::SQLite::Util qw(vcmp);
+use CPAN::SQLite::Util qw(vcmp print_debug);
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 my $ext = qr/\.(tar\.gz|tar\.Z|tgz|zip)$/;
 
@@ -39,7 +39,7 @@ sub dists_and_mods {
   foreach my $cpan_file (keys %$cpan_files) {
     if ($pat and ($cpan_file =~ /^($pat)/)) {
       delete $cpan_files->{$cpan_file};
-      print "Ignoring $cpan_file\n";
+      print_debug("Ignoring $cpan_file\n");
       next;
     }
     my $d = CPAN::DistnameInfo->new($cpan_file);
@@ -49,14 +49,14 @@ sub dists_and_mods {
     my $cpanid = $d->cpanid;
     my $dist_file = $d->filename;
     unless ($dist_name and $dist_vers and $cpanid) {
-      print "No dist_name/version/cpanid for $cpan_file: skipping\n";
+      print_debug("No dist_name/version/cpanid for $cpan_file: skipping\n");
       delete $cpan_files->{$cpan_file};
       next;
     }
     # ignore specified dists
     if ($pat and ($dist_name =~ /^($pat)$/)) {
       delete $cpan_files->{$cpan_file};
-      print "Ignoring $dist_name\n";
+      print_debug("Ignoring $dist_name\n");
       next;
     }
     if (not $dists->{$dist_name} or 
@@ -127,7 +127,7 @@ sub modlist {
 			catfile($self->{keep_source_where}, $index) ) :
 			  catfile($self->{CPAN}, $index);
   die qq{Cannot find '$mod'} unless -f $mod;
-  print "Reading information from $mod\n";
+  print_debug("Reading information from $mod\n");
   my $lines = zcat($mod);
   while (@$lines) {
     my $shift = shift(@$lines);
@@ -149,7 +149,7 @@ sub packages {
 			catfile($self->{keep_source_where}, $index) ) :
 			  catfile($self->{CPAN}, $index);
   die qq{Cannot find '$packages'} unless -f $packages;
-  print "Reading information from $packages\n";
+  print_debug("Reading information from $packages\n");
   my $lines = zcat($packages);
   while (@$lines) {
     my $shift = shift(@$lines);
@@ -173,7 +173,7 @@ sub mailrc {
 			catfile($self->{keep_source_where}, $index) ) :
 			  catfile($self->{CPAN}, $index);
   die qq{Cannot find '$mailrc'} unless -f $mailrc;
-  print "Reading information from $mailrc\n";
+  print_debug("Reading information from $mailrc\n");
   my $lines = zcat($mailrc);
   my $auths;
   foreach (@$lines) {
@@ -236,7 +236,7 @@ F<$CPAN/authors/01mailrc.txt.gz>.
 
 A C<CPAN::SQLite::Info> object is created with
 
-    my $info = CPAN::SQLite::Info(CPAN => $cpan);
+    my $info = CPAN::SQLite::Info->new(CPAN => $cpan);
 
 where C<$cpan> specifies the top-level CPAN directory
 underneath which the index files are found. Calling
