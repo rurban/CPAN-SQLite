@@ -6,7 +6,7 @@ use base qw(Exporter);
 our @EXPORT_OK;
 @EXPORT_OK = qw(setup update);
 our $global_id;
-our $VERSION = '0.19';
+our $VERSION = '0.195';
 
 sub new {
   my ($class, $cpan_meta) = @_;
@@ -105,7 +105,8 @@ sub set_data {
 }
 
 sub set_list_data {
-  my ($self, $results) = @_;
+  my ($self, $results, $download) = @_;
+  $global_id = $download;
   $self->set_containsmods($results);
   $global_id = undef;
 }
@@ -142,7 +143,8 @@ sub set_data {
 }
 
 sub set_list_data {
-  my ($self, $results) = @_;
+  my ($self, $results, $download) = @_;
+  $global_id = $download;
   $self->set_containsmods($results);
   $global_id = undef;
 }
@@ -185,7 +187,8 @@ sub set_data {
 }
 
 sub set_list_data {
-  my ($self, $results) = @_;
+  my ($self, $results, $download) = @_;
+  $global_id = $download;
   $self->set_containsmods($results);
   $global_id = undef;
 }
@@ -288,27 +291,28 @@ sub set_containsmods {
 
 sub reload {
   my($self, %args) = @_;
-  my $time = $args{time} || time;
+  my $time = $args{'time'} || time;
   my $force = $args{force};
   my $db_name = $CPAN::SQLite::db_name;
   my $db = File::Spec->catfile($CPAN::Config->{cpan_home}, $db_name);
   my $journal_file = $db . '-journal';
-  if (-f $journal_file) {
+  if (-e $journal_file) {
     warn qq{Database locked - cannot update.};
     return;
   }
   my @args = ($^X, '-MCPAN::SQLite::META qw(setup update)', '-e');
-  if (-f $db) {
+  if (-e $db && -s _) {
     my $mtime_db = (stat(_))[9];
     my $time_string = gmtime_string($mtime_db);
     warn "Database was generated on $time_string\n";
     unless ($force) {
-      return if ($time - $mtime_db < 86400);
+      return if (($time - $mtime_db) < $CPAN::Config->{index_expire}*86400);
     }
     warn "Updating database file ...\n";
     push @args, q{update};
   }
   else {
+    unlink($db) if -e _;
     warn "Creating database file ...\n";
     push @args, q{setup};
   }

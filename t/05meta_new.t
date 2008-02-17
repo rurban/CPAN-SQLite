@@ -45,7 +45,7 @@ if ($@ or CPAN::Version->vcmp($actual_cpan_v, $min_cpan_v) < 0) {
   plan skip_all => qq{Need CPAN.pm version $min_cpan_v or higher};
 }
 else {
-  plan tests => 2515;
+  plan tests => 2768;
 }
 
 # verify that we loaded the right CPAN::Config
@@ -60,6 +60,96 @@ for (@dirs) {
 }
 my $db = File::Spec->catfile($home, 'cpandb.sql');
 unlink($db) if -e $db;
+
+{
+  my $mod_name = q{Date::Language};
+  my $mod = CPAN::Shell->expand("Module", $mod_name);
+  is(-e $db, 1, "$db exists");
+  is(-s $db > 0, 1, "$db has non-zero size");
+  is($mod->id, $mod_name);
+  like($mod->cpan_file, qr/$mods->{$mod_name}->{dist_name}/,
+       $mods->{$mod_name}->{dist_name});
+  next unless $mods->{$mod_name}->{mod_vers};
+  is(vcmp($mod->cpan_version, $mods->{$mod_name}->{mod_vers}), 0,
+     "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
+}
+
+{
+  my $dist_file = q{TimeDate-1.16.tar.gz};
+  my $dist_name = q{TimeDate};
+  my $cpanid = q{GBARR};
+  my $query = "$cpanid/$dist_file";
+  my $dist = CPAN::Shell->expand("Distribution", $query);
+  my $dist_id = download($cpanid, $dists->{$dist_name}->{dist_file});
+  is($dist->id, $dist_id);
+  is($dist->author->id, $cpanid);
+  my %mods = map {$_ => 1 } $dist->containsmods;
+  foreach my $mod(keys %{$dists->{$dist_name}->{modules}}) {
+    is($mods{$mod}, 1, $mod);
+  }
+}
+
+for my $mod_search (qw(Apache::)) {
+  for my $mod (CPAN::Shell->expand("Module", "/$mod_search/")) {
+    my $mod_name = $mod->id;
+    is(defined $mods->{$mod_name}, 1, $mod_name);
+    like($mod->cpan_file, qr/$mods->{$mod_name}->{dist_name}/,
+         $mods->{$mod_name}->{dist_name});
+    next unless $mods->{$mod_name}->{mod_vers};
+    is(vcmp($mod->cpan_version, $mods->{$mod_name}->{mod_vers}), 0,
+       "version $mods->{$mod_name}->{mod_vers} for '$mod_name'");
+  }
+}
+
+{
+  my $dist_file = q{Apache-GzipChain-1.14.tar.gz};
+  my $dist_name = q{Apache-GzipChain};
+  my $cpanid = q{ANDK};
+  my $query = "$cpanid/$dist_file";
+  my $dist = CPAN::Shell->expand("Distribution", $query);
+  my $dist_id = download($cpanid, $dists->{$dist_name}->{dist_file});
+  is($dist->id, $dist_id);
+  is($dist->author->id, $cpanid);
+  my %mods = map {$_ => 1 } $dist->containsmods;
+  foreach my $mod(keys %{$dists->{$dist_name}->{modules}}) {
+    is($mods{$mod}, 1, $mod);
+  }
+}
+
+for my $dist_search(qw(CPAN-Test)) {
+  for my $dist (CPAN::Shell->expand("Distribution", "/$dist_search/")) {
+    my $id = $dist->id;
+    my $pathname = "authors/id/$id";
+    my $d = CPAN::DistnameInfo->new($pathname);
+    my $dist_name = $d->dist;
+    is(defined $dists->{$dist_name}, 1, $dist_name);
+    my $cpanid = $dist->author->id;
+    my $download = download($cpanid, $dists->{$dist_name}->{dist_file});
+    is($id, $download, $download);
+    is($cpanid, $dists->{$dist_name}->{cpanid},
+       $dists->{$dist_name}->{cpanid});
+    my %mods = map {$_ => 1 } $dist->containsmods;
+    my $mods = $dist->containsmods;
+    foreach my $mod(keys %{$dists->{$dist_name}->{modules}}) {
+      is($mods{$mod}, 1, $mod);
+    }
+  }
+}
+
+{
+  my $dist_file = q{CPAN-Test-Dummy-Perl5-Make-1.05.tar.gz};
+  my $dist_name = q{CPAN-Test-Dummy-Perl5-Make};
+  my $cpanid = q{ANDK};
+  my $query = "$cpanid/$dist_file";
+  my $dist = CPAN::Shell->expand("Distribution", $query);
+  my $dist_id = download($cpanid, $dists->{$dist_name}->{dist_file});
+  is($dist->id, $dist_id);
+  is($dist->author->id, $cpanid);
+  my %mods = map {$_ => 1 } $dist->containsmods;
+  foreach my $mod(keys %{$dists->{$dist_name}->{modules}}) {
+    is($mods{$mod}, 1, $mod);
+  }
+}
 
 foreach my $cpanid (keys %$auths) {
   my $auth = CPAN::Shell->expand("Author", $cpanid);
@@ -100,9 +190,9 @@ for my $dist_name(keys %$dists) {
   my $dist_id = download($cpanid, $dists->{$dist_name}->{dist_file});
   is($dist->id, $dist_id);
   is($dist->author->id, $cpanid);
-  my $mods = $dist->containsmods;
+  my %mods = map {$_ => 1 } $dist->containsmods;
   foreach my $mod(keys %{$dists->{$dist_name}->{modules}}) {
-    like($mod, qr/\b$mod\b/, $mod);
+    is($mods{$mod}, 1, $mod);
   }
 }
 
@@ -142,9 +232,9 @@ for my $dist_search(qw(apache test.*perl)) {
     is($id, $download, $download);
     is($cpanid, $dists->{$dist_name}->{cpanid},
        $dists->{$dist_name}->{cpanid});
-    my $mods = $dist->containsmods;
+    my %mods = map {$_ => 1 } $dist->containsmods;
     foreach my $mod(keys %{$dists->{$dist_name}->{modules}}) {
-      like($mod, qr/\b$mod\b/, $mod);
+      is($mods{$mod}, 1, $mod);
     }
   }
 }
@@ -170,9 +260,6 @@ foreach my $type(qw(Author Distribution Module)) {
   is($item, undef, "no such $type");
 
 }
-
-rmtree($sources) if -d $sources;
-unlink($db) if -e $db;
 
 # Local Variables:
 # mode: cperl

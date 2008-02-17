@@ -7,11 +7,11 @@ use CPAN::SQLite::Util qw($mode_info);
 use CPAN::SQLite::DBI::Search;
 
 our $max_results = 0;
-our $VERSION = '0.19';
+our $VERSION = '0.195';
 my $cdbi_query;
 
 my %mode2obj;
-$mode2obj{$_} = __PACKAGE__ . '::' . $_ 
+$mode2obj{$_} = __PACKAGE__ . '::' . $_
   for (qw(dist author module));
 
 sub new {
@@ -151,7 +151,7 @@ sub search {
   my $meta_obj = $args{meta_obj};
 
   $args{fields} = [ qw(mod_id mod_name mod_abs mod_vers chapterid
-		       dslip dist_id dist_name dist_file
+		       dslip dist_id dist_name dist_file dist_vers dist_abs
 		       auth_id cpanid fullname email) ];
   $args{table} = 'dists';
   $args{join} = { mods => 'dist_id',
@@ -168,33 +168,27 @@ sub search {
 # if running under CPAN.pm, need to build a list of modules
 # contained in the distribution
   if ($meta_obj) {
+    my %seen;
     $args{join} = undef;
     $args{table} = 'mods';
     my @items = (ref($results) eq 'ARRAY') ? @$results : ($results);
     foreach my $item(@items) {
-      $args{fields} = [ qw(dist_id) ];
-      $args{join} = { dists => 'dist_id',
-		    };
-      $args{order_by} = undef;
-      my $search = {id => 'mod_id',
-		    value => $item->{mod_id},
-		    type => 'id',
-		   };
-      my $ids = $cdbi->fetch(%args,
-			     search => $search);
-
+      my $dist_id = $item->{dist_id};
+      next if $seen{$dist_id};
       $args{fields} = [ qw(mod_name mod_abs) ];
       $args{order_by} = 'mod_name';
       $args{join} = undef;
-      $search = {id => 'dist_id',
-		 value => $ids->{dist_id},
-		 type => 'id',
-		 wantarray => 1,
-		};
+      my $search = {id => 'dist_id',
+		    value => $item->{dist_id},
+		    type => 'id',
+		    wantarray => 1,
+		   };
+      $seen{$dist_id}++;
       my $mods;
       next unless $mods = $cdbi->fetch_and_set(%args, 
 					       search => $search,
-					       set_list => 1);
+					       set_list => 1,
+					       download => $item->{download});
     }
   }
   unless ($meta_obj) {
@@ -242,7 +236,8 @@ sub search {
     next unless $mods = ($meta_obj ?
 			 $cdbi->fetch_and_set(%args, 
 					      search => $search,
-					      set_list => 1) :
+					      set_list => 1,
+					      download => $item->{download}) :
 			 $cdbi->fetch(%args,
 				      search => $search) );
     next if $meta_obj;

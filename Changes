@@ -1,5 +1,24 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.195 Feb 16, 2008
+  - fix further bugs where sometimes a regex search for
+    distributions and/or modules, followed by a distribution
+    search for a specific distribution, didn't properly
+    populate the CONTAINSMODS field
+  - add CPAN::Shell->reload('index') in the t/05meta.t test
+    to ensure the database is created, and test that it has
+    non-zero size
+  - fix bug where sometimes a regex module search, followed
+    by a distribution search for a specific distribution,
+    didn't properly set the abstract and version fields
+  - fix bug in t/05meta_*.t tests so as to correctly compare modules
+    in a distribution.
+  - honour $Config::CPAN->{index_expire} to decide when to update
+    the database
+  - improved error checking for the exisitence of the database,
+    including also a check on the size, if it exists, when 
+    deciding whether to update or create the database.
+
 0.19 Feb 3, 2008
   - fix bug whereby a query for a module, followed by a query for
     the distribution containing that module, would only list the

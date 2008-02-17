@@ -3,7 +3,7 @@ use base qw(CPAN::SQLite::DBI);
 use CPAN::SQLite::DBI qw($tables $dbh);
 use CPAN::SQLite::Util qw($full_id);
 
-our $VERSION = '0.19';
+our $VERSION = '0.195';
 
 use strict;
 use warnings;
@@ -44,16 +44,19 @@ sub fetch {
     $self->db_error();
     return;
   };
-  $sth->execute();
+  $sth->execute() or do {
+    $self->db_error($sth);
+    return;
+  };
 
   if (not $search->{wantarray}) {
-    my (%results, %meta_results);
+    my (%results, %meta_results, $results);
     @results{@fields} = $sth->fetchrow_array;
+    $results = ($sth->rows == 0) ? undef : \%results;
     $sth->finish;
-    return if $sth->rows == 0;
-    $self->extra_info(\%results);
     undef $sth;
-    return \%results;
+    $self->extra_info($results) if $results;
+    return $results;
   }
   else {
     my (%hash, $results);
@@ -62,8 +65,8 @@ sub fetch {
       $self->extra_info(\%tmp);
       push @{$results}, \%tmp;
     }
+    $results = undef if ($sth->rows == 0);
     $sth->finish;
-    return if $sth->rows == 0;
     undef $sth;
     return $results;
   }
@@ -87,20 +90,27 @@ sub fetch_and_set {
     $self->db_error();
     return;
   };
-  $sth->execute();
+  $sth->execute() or do {
+    $self->db_error($sth);
+    return;
+  };
 
   my $want_ids = $args{want_ids};
   my $set_list = $args{set_list};
+  my $download = $args{download};
   if (not $search->{wantarray}) {
-    my (%results, %meta_results);
+    my (%results, %meta_results, $results);
     @results{@fields} = $sth->fetchrow_array;
+    $results = ($sth->rows == 0) ? undef : \%results;
     $sth->finish;
-    return if $sth->rows == 0;
-    $self->extra_info(\%results);
-    $meta_obj->set_data(\%results);
     undef $sth;
+    return unless $results;
+    $self->extra_info($results);
+    $meta_obj->set_data($results);
     if ($want_ids) {
-      $meta_results{$search->{id}} = $results{$search->{id}};
+      $meta_results{dist_id} = $results{dist_id};
+      $meta_results{download} = download($results{cpanid},
+					 $results{dist_file});
       return \%meta_results;
     }
     else {
@@ -118,14 +128,18 @@ sub fetch_and_set {
 	$self->extra_info(\%tmp);
 	$meta_obj->set_data(\%tmp);	
 	if ($want_ids) {
-	  push @{$meta_results}, {$search->{id} => $tmp{$search->{id}}};
+	  my $download = download($tmp{cpanid}, $tmp{dist_file});
+	  push @{$meta_results}, {dist_id => $tmp{dist_id},
+				  download => $download};
+
 	}
       }
     }
+    $meta_results = undef if ($sth->rows == 0);
     $sth->finish;
-    return if $sth->rows == 0;
     undef $sth;
-    $meta_obj->set_list_data($meta_results) if $set_list;
+    return unless $meta_results;
+    $meta_obj->set_list_data($meta_results, $download) if $set_list;
     return $want_ids ? $meta_results : 1;
   }
 }

@@ -26,6 +26,7 @@ t/02drop.t
 t/03info.t
 t/lib/TestSQL.pm
 t/04search.t
-t/05meta.t
+t/05meta_new.t
+t/05meta_update.t
 t/99pod.t
 
