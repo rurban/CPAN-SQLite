@@ -6,7 +6,7 @@ require File::Spec;
 use Cwd;
 require CPAN::SQLite::META;
 
-our $VERSION = '0.195';
+our $VERSION = '0.196';
 
 # an array ref of distributions to ignore indexing
 my $ignore = [qw(SpreadSheet-WriteExcel-WebPivot)];
@@ -311,6 +311,8 @@ L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPAN-SQLite>.
 Information messages from the indexing procedures are printed
 out to STDOUT if the environment variable CPAN_SQLITE_DEBUG
 is set. This is automatically set within L<CPAN::SQLite::Index>.
+If CPAN_SQLITE_NO_LOG_FILES is set, no log files will be created
+during the indexing procedures.
 
 =head1 COPYRIGHT
 

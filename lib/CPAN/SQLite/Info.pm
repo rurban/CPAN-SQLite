@@ -8,7 +8,7 @@ use File::Basename;
 use Safe;
 use CPAN::SQLite::Util qw(vcmp print_debug);
 
-our $VERSION = '0.195';
+our $VERSION = '0.196';
 
 my $ext = qr/\.(tar\.gz|tar\.Z|tgz|zip)$/;
 

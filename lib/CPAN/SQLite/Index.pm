@@ -10,8 +10,10 @@ use File::Basename;
 use File::Path;
 use LWP::Simple qw(getstore is_success);
 
-our $VERSION = '0.195';
-$ENV{CPAN_SQLITE_DEBUG} = 1;
+our $VERSION = '0.196';
+unless ($ENV{CPAN_SQLITE_NO_LOG_FILES}) {
+  $ENV{CPAN_SQLITE_DEBUG} = 1;
+}
 
 our ($oldout);
 my $log_file = 'cpan_sqlite_log.' . time;
@@ -38,7 +40,9 @@ sub index {
     }
   }
   my $log = catfile($self->{log_dir}, $log_file);
-  $oldout = error_fh($log);
+  unless ($ENV{CPAN_SQLITE_NO_LOG_FILES}) {
+    $oldout = error_fh($log);
+  }
 
   if ($self->{update_indices}) {
     warn qq{Fetching index files ...\n};
@@ -136,8 +140,10 @@ sub error_fh {
 }
 
 sub DESTROY {
-  close STDOUT;
-  open(STDOUT, ">&$oldout");
+  unless ($ENV{CPAN_SQLITE_NO_LOG_FILES}) {
+    close STDOUT;
+    open(STDOUT, ">&$oldout");
+  }
 }
 
 1;

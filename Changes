@@ -1,5 +1,11 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.196 June 6, 2008
+  - turn off creation of log files during indexing procedures
+    via setting $ENV{CPAN_SQLITE_NO_LOG_FILES}, as suggested
+    by DAGOLDEN:
+        http://rt.cpan.org/Ticket/Display.html?id=36411
+        
 0.195 Feb 16, 2008
   - fix further bugs where sometimes a regex search for
     distributions and/or modules, followed by a distribution
