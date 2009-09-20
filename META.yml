@@ -1,57 +1,58 @@
 --- #YAML:1.0
 name:         CPAN-SQLite
-version:      0.197
+version:      0.198
 installdirs:  site
 license:      perl
 abstract:     maintain and search a minimal CPAN database
 author:
-    - 'Randy Kobes <r.kobes@uwinnipeg.ca>'
+    - 'Randy Kobes <randy.kobes@gmail.com>'
 requires:
     Archive::Tar:                  1.08
     CPAN::DistnameInfo:            0
     File::Spec:                    0
     IO::Zlib:                      0
     DBD::SQLite:                   0
+    Compress::Zlib:                0
     File::HomeDir:                 0
     LWP::Simple:                   0
 distribution_type: module
 provides:
   CPAN::SQLite:
     file: lib/CPAN/SQLite.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::Extract:
     file: lib/CPAN/SQLite/Extract.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::Index:
     file: lib/CPAN/SQLite/Index.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::Info:
     file: lib/CPAN/SQLite/Info.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::Populate:
     file: lib/CPAN/SQLite/Populate.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::Search:
     file: lib/CPAN/SQLite/Search.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::State:
     file: lib/CPAN/SQLite/State.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::Util:
     file: lib/CPAN/SQLite/Util.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::META:
     file: lib/CPAN/SQLite/META.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::DBI:
     file: lib/CPAN/SQLite/DBI.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::DBI::Query:
     file: lib/CPAN/SQLite/DBI/Query.pm
-    version: 0.197
+    version: 0.198
   CPAN::SQLite::DBI::Index:
     file: lib/CPAN/SQLite/DBI/Index.pm
-    version: 0.197
+    version: 0.198
 no_index:
     file:
         - t/dot-cpan/CPAN/TestConfig.pm
@@ -63,7 +64,7 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.3.html
 resources:
   license: http://dev.perl.org/licenses/
-  homepage: http://github.com/rkobes/cpan-sqlite/tree/master
+  homepage: http://github.com/rkobes/cpan-sqlite
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPAN-SQLite
   AnnoCPAN: http://annocpan.org/dist/CPAN-SQLite
   CPANForum: http://www.cpanforum.com/dist/CPAN-SQLite

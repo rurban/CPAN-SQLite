@@ -4,7 +4,7 @@ use base qw(CPAN::SQLite::DBI);
 
 use strict;
 use warnings;
-our $VERSION = '0.197';
+our $VERSION = '0.198';
 
 package CPAN::SQLite::DBI::Index::chaps;
 use base qw(CPAN::SQLite::DBI::Index);
@@ -112,7 +112,7 @@ sub drop_table {
   my $sth = $dbh->prepare($sql);
   $sth->execute($table);
   if (defined $sth->fetchrow_array) {
-    $dbh->do(qq{drop table $table)}) or do {
+    $dbh->do(qq{drop table $table}) or do {
       $self->db_error($sth);
       return;
     };
