@@ -1,3 +1,5 @@
+# $Id: 05meta_new.t 32 2011-06-13 02:37:53Z stro $
+
 use strict;
 use warnings;
 use Test::More;
@@ -11,9 +13,11 @@ use CPAN::DistnameInfo;
 use CPAN::SQLite::Util qw(download);
 use lib "$FindBin::Bin/lib";
 use TestSQL qw($mods $auths $dists has_hash_data vcmp);
+use TestShell;
+
 my $cwd = cwd;
 my $path_sep = $Config{path_sep} || ':';
-$ENV{PERL5LIB} = join $path_sep, 
+$ENV{PERL5LIB} = join $path_sep,
   (File::Spec->catdir($cwd, qw(t dot-cpan)),
    map {File::Spec->catdir($cwd, 'blib', $_)} qw(arch lib) ), $ENV{PERL5LIB};
 # so that a real $HOME/.cpan isn't used

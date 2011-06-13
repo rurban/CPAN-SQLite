@@ -1,4 +1,5 @@
-#!/usr/bin/perl
+# $Id: 04search.t 31 2011-06-12 22:56:18Z stro $
+
 use strict;
 use warnings;
 use Test::More;
@@ -19,10 +20,10 @@ my $db_name = 'cpandb.sql';
 my $db_dir = $cwd;
 
 my $cdbi = CPAN::SQLite::DBI::Search->new(db_name => $db_name,
-					  db_dir => $db_dir);
+                                          db_dir => $db_dir);
 
 my $query = CPAN::SQLite::Search->new(db_name => $db_name,
-				      db_dir => $db_dir);
+                                      db_dir => $db_dir);
 ok(defined $query);
 isa_ok($query, 'CPAN::SQLite::Search');
 
@@ -134,18 +135,18 @@ sub compare_arrays {
       my $flag = 0;
       for (my $j=0; $j<$N; $j++) {
         if ($y->[$j]->{$key}) {
-	  my $test = ($key =~ /vers$/) ?
-	    (vcmp($x->[$i]->{$key}, $y->[$j]->{$key}) == 0) :
-	      $x->[$i]->{$key} eq $y->[$j]->{$key};
-	  if ($test) {
-	    pass("Found matching $key");
-	    $flag++;
-	    last;
-	  }
-	}
+          my $test = ($key =~ /vers$/) ?
+            (vcmp($x->[$i]->{$key}, $y->[$j]->{$key}) == 0) :
+              $x->[$i]->{$key} eq $y->[$j]->{$key};
+          if ($test) {
+            pass("Found matching $key");
+            $flag++;
+            last;
+          }
+        }
       }
       unless ($flag) {
-	fail(qq{Matching $key not found});
+        fail(qq{Matching $key not found});
       }
     }
   }

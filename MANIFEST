@@ -13,20 +13,22 @@ lib/CPAN/SQLite/State.pm
 lib/CPAN/SQLite/Util.pm
 Makefile.PL
 Build.PL
-MANIFEST			This list of files
+MANIFEST            This list of files
 META.yml
 README
 Changes
+t/00compile.t
 t/01basic.t
+t/02drop.t
+t/03info.t
+t/04search.t
+t/05meta_new.t
+t/05meta_update.t
+t/06search_everything.t
 t/cpan/authors/01mailrc.txt.gz
 t/cpan/modules/02packages.details.txt.gz
 t/cpan/modules/03modlist.data.gz
 t/dot-cpan/CPAN/TestConfig.pm
-t/02drop.t
-t/03info.t
+t/lib/TestShell.pm
 t/lib/TestSQL.pm
-t/04search.t
-t/05meta_new.t
-t/05meta_update.t
-t/99pod.t
 

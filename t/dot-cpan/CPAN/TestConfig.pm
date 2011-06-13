@@ -1,3 +1,5 @@
+# $Id: TestConfig.pm 31 2011-06-12 22:56:18Z stro $
+
 use Cwd;
 my $cwd = cwd;
 my $Iswin = $^O eq "MSWin32";
@@ -6,7 +8,7 @@ $CPAN::Config = {
                                 'make_install_make_command' => q[make],
                                 'mbuild_install_build_command' => q[./Build],
                                ),
-		 'QAZWSX' => q[PLMOKN],
+                 'QAZWSX' => q[PLMOKN],
                  'auto_commit' => q[0],
                  'build_cache' => q[100],
                  'build_dir' => qq[$cwd/t/dot-cpan/build],
@@ -44,13 +46,13 @@ $CPAN::Config = {
                  'scan_cache' => q[atstart],
                  #'shell' => q[/usr/bin/zsh],
                  'show_upload_date' => q[0],
-		 'sqlite_dbname' => 'cpandb-sqlite',
+                 'sqlite_dbname' => 'cpandb-sqlite',
                  #'tar' => q[/bin/tar],
                  'term_is_latin' => q[0],
                  'term_ornaments' => q[0],
                  #'unzip' => q[/usr/bin/unzip],
                  'urllist' => [qq[file:/$cwd/t/cpan]],
-		 'use_sqlite' => q[1],
+                 'use_sqlite' => q[1],
                  'wait_list' => [q[wait://ls6.informatik.uni-dortmund.de:1404]],
                  #'wget' => q[/usr/bin/wget],
                 };

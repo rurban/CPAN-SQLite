@@ -1,4 +1,5 @@
-#!/usr/bin/perl
+# $Id: 02drop.t 31 2011-06-12 22:56:18Z stro $
+
 use strict;
 use warnings;
 use Test::More;

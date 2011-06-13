@@ -1,3 +1,5 @@
+# $Id: 05meta_update.t 31 2011-06-12 22:56:18Z stro $
+
 use strict;
 use warnings;
 use Test::More;
@@ -13,7 +15,7 @@ use lib "$FindBin::Bin/lib";
 use TestSQL qw($mods $auths $dists has_hash_data vcmp);
 my $cwd = cwd;
 my $path_sep = $Config{path_sep} || ':';
-$ENV{PERL5LIB} = join $path_sep, 
+$ENV{PERL5LIB} = join $path_sep,
   (File::Spec->catdir($cwd, qw(t dot-cpan)),
    map {File::Spec->catdir($cwd, 'blib', $_)} qw(arch lib) ), $ENV{PERL5LIB};
 # so that a real $HOME/.cpan isn't used

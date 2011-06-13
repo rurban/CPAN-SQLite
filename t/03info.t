@@ -1,4 +1,5 @@
-#!/usr/bin/perl
+# $Id: 03info.t 31 2011-06-12 22:56:18Z stro $
+
 use strict;
 use warnings;
 use Test::More;
@@ -62,8 +63,8 @@ foreach my $dist_name (keys %$dists) {
     foreach my $key(keys %$chapterid) {
       ok(exists $info_dists->{$dist_name}->{chapterid}->{$key});
       foreach my $subchapter (keys %{$chapterid->{$key}}) {
-	is($info_dists->{$dist_name}->{chapterid}->{$key}->{$subchapter},
-	   $chapterid->{$key}->{$subchapter});
+        is($info_dists->{$dist_name}->{chapterid}->{$key}->{$subchapter},
+           $chapterid->{$key}->{$subchapter});
       }
     }
   }
@@ -91,16 +92,16 @@ foreach my $table(@tables) {
 }
 
 use CPAN::SQLite::DBI qw($tables);
-my $cdbi = CPAN::SQLite::DBI::Index->new(CPAN => $CPAN, 
-					 db_name => $db_name,
-					 db_dir => $db_dir);
+my $cdbi = CPAN::SQLite::DBI::Index->new(CPAN => $CPAN,
+                                         db_name => $db_name,
+                                         db_dir => $db_dir);
 isa_ok($cdbi, 'CPAN::SQLite::DBI::Index');
 
 use CPAN::SQLite::Populate;
 my $pop = CPAN::SQLite::Populate->new(db_name => $db_name,
-				      db_dir => $db_dir,
-				      setup => 1, CPAN => $CPAN,
-				      index => $index);
+                                      db_dir => $db_dir,
+                                      setup => 1, CPAN => $CPAN,
+                                      index => $index);
 isa_ok($pop, 'CPAN::SQLite::Populate');
 $pop->populate();
 ok(1);

@@ -1,5 +1,14 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.200 Jun 11, 2011
+  - SQLite REGEXP is used instead of custom function to prevent "Use of
+    uninitialized value $x in pattern match" warning in modern Perl versions
+     RT#67442: https://rt.cpan.org/Ticket/Display.html?id=67442
+    (reported by Mike Doherty)
+  - "warn"s are replaced with $CPAN::FrontEnd calls
+     RT#59691: https://rt.cpan.org/Ticket/Display.html?id=59691
+    (reported by Randy J. Ray)
+
 0.199 Dec 29, 2009
   - require CPAN::DistnameInfo 0.09, which normalizes dist() for CGI.pm
     (reported by Pete Armstrong)

@@ -1,3 +1,5 @@
+# $Id: TestSQL.pm 31 2011-06-12 22:56:18Z stro $
+
 package TestSQL;
 use strict;
 use warnings;
@@ -3466,7 +3468,7 @@ sub vlt {
 
 sub vstring {
   my ($self, $n) = @_;
-  $n =~ s/^v// 
+  $n =~ s/^v//
     or die "CPAN::Search::Lite::Version::vstring() called with invalid arg [$n]";
   {
     no warnings;
