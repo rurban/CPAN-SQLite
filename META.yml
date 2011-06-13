@@ -1,76 +1,105 @@
---- #YAML:1.0
-name:         CPAN-SQLite
-version:      0.199
-installdirs:  site
-license:      perl
-abstract:     maintain and search a minimal CPAN database
+---
+abstract: 'maintain and search a minimal CPAN database'
 author:
-    - 'Randy Kobes <randy.kobes@gmail.com>'
-requires:
-    Archive::Tar:                  1.08
-    CPAN::DistnameInfo:            0.09
-    File::Spec:                    0
-    IO::Zlib:                      0
-    DBD::SQLite:                   0
-    Compress::Zlib:                0
-    File::HomeDir:                 0
-    LWP::Simple:                   0
-distribution_type: module
+  - 'Serguei Trouchelle <stro@cpan.org>'
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3607'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: CPAN-SQLite
 provides:
   CPAN::SQLite:
     file: lib/CPAN/SQLite.pm
-    version: 0.199
-  CPAN::SQLite::Extract:
-    file: lib/CPAN/SQLite/Extract.pm
-    version: 0.199
-  CPAN::SQLite::Index:
-    file: lib/CPAN/SQLite/Index.pm
-    version: 0.199
-  CPAN::SQLite::Info:
-    file: lib/CPAN/SQLite/Info.pm
-    version: 0.199
-  CPAN::SQLite::Populate:
-    file: lib/CPAN/SQLite/Populate.pm
-    version: 0.199
-  CPAN::SQLite::Search:
-    file: lib/CPAN/SQLite/Search.pm
-    version: 0.199
-  CPAN::SQLite::State:
-    file: lib/CPAN/SQLite/State.pm
-    version: 0.199
-  CPAN::SQLite::Util:
-    file: lib/CPAN/SQLite/Util.pm
-    version: 0.199
-  CPAN::SQLite::META:
-    file: lib/CPAN/SQLite/META.pm
-    version: 0.199
+    version: 0.200
   CPAN::SQLite::DBI:
     file: lib/CPAN/SQLite/DBI.pm
-    version: 0.199
-  CPAN::SQLite::DBI::Query:
-    file: lib/CPAN/SQLite/DBI/Query.pm
-    version: 0.199
+    version: 0.200
   CPAN::SQLite::DBI::Index:
     file: lib/CPAN/SQLite/DBI/Index.pm
-    version: 0.199
-no_index:
-    file:
-        - t/dot-cpan/CPAN/TestConfig.pm
-        - t/lib/TestSQL.pm
-urls:
-   license: http://dev.perl.org/licenses/
-meta-spec:
-  version: 1.3
-  url: http://module-build.sourceforge.net/META-spec-v1.3.html
+    version: 0.200
+  CPAN::SQLite::DBI::Index::auths:
+    file: lib/CPAN/SQLite/DBI/Index.pm
+  CPAN::SQLite::DBI::Index::chaps:
+    file: lib/CPAN/SQLite/DBI/Index.pm
+  CPAN::SQLite::DBI::Index::dists:
+    file: lib/CPAN/SQLite/DBI/Index.pm
+  CPAN::SQLite::DBI::Index::mods:
+    file: lib/CPAN/SQLite/DBI/Index.pm
+  CPAN::SQLite::DBI::Search:
+    file: lib/CPAN/SQLite/DBI/Search.pm
+    version: 0.200
+  CPAN::SQLite::DBI::Search::auths:
+    file: lib/CPAN/SQLite/DBI/Search.pm
+  CPAN::SQLite::DBI::Search::chaps:
+    file: lib/CPAN/SQLite/DBI/Search.pm
+  CPAN::SQLite::DBI::Search::dists:
+    file: lib/CPAN/SQLite/DBI/Search.pm
+  CPAN::SQLite::DBI::Search::mods:
+    file: lib/CPAN/SQLite/DBI/Search.pm
+  CPAN::SQLite::Index:
+    file: lib/CPAN/SQLite/Index.pm
+    version: 0.200
+  CPAN::SQLite::Info:
+    file: lib/CPAN/SQLite/Info.pm
+    version: 0.200
+  CPAN::SQLite::META:
+    file: lib/CPAN/SQLite/META.pm
+    version: 0.200
+  CPAN::SQLite::META::Author:
+    file: lib/CPAN/SQLite/META.pm
+  CPAN::SQLite::META::Bundle:
+    file: lib/CPAN/SQLite/META.pm
+  CPAN::SQLite::META::Distribution:
+    file: lib/CPAN/SQLite/META.pm
+  CPAN::SQLite::META::Module:
+    file: lib/CPAN/SQLite/META.pm
+  CPAN::SQLite::Populate:
+    file: lib/CPAN/SQLite/Populate.pm
+    version: 0.200
+  CPAN::SQLite::Populate::auths:
+    file: lib/CPAN/SQLite/Populate.pm
+  CPAN::SQLite::Populate::chaps:
+    file: lib/CPAN/SQLite/Populate.pm
+  CPAN::SQLite::Populate::dists:
+    file: lib/CPAN/SQLite/Populate.pm
+  CPAN::SQLite::Populate::mods:
+    file: lib/CPAN/SQLite/Populate.pm
+  CPAN::SQLite::Search:
+    file: lib/CPAN/SQLite/Search.pm
+    version: 0.200
+  CPAN::SQLite::Search::author:
+    file: lib/CPAN/SQLite/Search.pm
+  CPAN::SQLite::Search::dist:
+    file: lib/CPAN/SQLite/Search.pm
+  CPAN::SQLite::Search::module:
+    file: lib/CPAN/SQLite/Search.pm
+  CPAN::SQLite::State:
+    file: lib/CPAN/SQLite/State.pm
+    version: 0.200
+  CPAN::SQLite::State::auths:
+    file: lib/CPAN/SQLite/State.pm
+  CPAN::SQLite::State::dists:
+    file: lib/CPAN/SQLite/State.pm
+  CPAN::SQLite::State::mods:
+    file: lib/CPAN/SQLite/State.pm
+  CPAN::SQLite::Util:
+    file: lib/CPAN/SQLite/Util.pm
+    version: 0.200
+  CPAN::SQLite::Version:
+    file: lib/CPAN/SQLite/Util.pm
+    version: 0.1
+requires:
+  Archive::Tar: 1.08
+  CPAN::DistnameInfo: 0.09
+  Compress::Zlib: 0
+  DBD::SQLite: 1.27
+  File::HomeDir: 0
+  File::Spec: 0
+  IO::Zlib: 0
+  LWP::Simple: 0
 resources:
   license: http://dev.perl.org/licenses/
-  homepage: http://github.com/rkobes/cpan-sqlite
-  bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=CPAN-SQLite
-  AnnoCPAN: http://annocpan.org/dist/CPAN-SQLite
-  CPANForum: http://www.cpanforum.com/dist/CPAN-SQLite
-  CPANTS: http://cpants.perl.org/dist/CPAN-SQLite
-  Rating: http://cpanratings.perl.org/d/CPAN-SQLite
-  SearchCPAN: http://search.cpan.org/~RKOBES/CPAN-SQLite/
-  Testers: http://cpantesters.perl.org/show/CPAN-SQLite.html
-  UWinnipeg: http://cpan.uwinnipeg.ca/dist/CPAN-SQLite
-generated_by: Randy Kobes
+version: 0.200
