@@ -1,4 +1,4 @@
-# $Id: Index.pm 31 2011-06-12 22:56:18Z stro $
+# $Id: Index.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite::DBI::Index;
 use CPAN::SQLite::DBI qw($dbh);
@@ -6,7 +6,7 @@ use base qw(CPAN::SQLite::DBI);
 
 use strict;
 use warnings;
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 
 package CPAN::SQLite::DBI::Index::chaps;
 use base qw(CPAN::SQLite::DBI::Index);

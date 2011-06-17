@@ -1,4 +1,4 @@
-# $Id: State.pm 31 2011-06-12 22:56:18Z stro $
+# $Id: State.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite::State;
 use strict;
@@ -7,7 +7,7 @@ no warnings qw(redefine);
 use CPAN::SQLite::DBI qw($dbh);
 use CPAN::SQLite::DBI::Index;
 use CPAN::SQLite::Util qw(has_hash_data print_debug);
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 
 my %tbl2obj;
 $tbl2obj{$_} = __PACKAGE__ . '::' . $_ for (qw(dists mods auths));

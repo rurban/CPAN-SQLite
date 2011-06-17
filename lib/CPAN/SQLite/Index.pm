@@ -1,4 +1,4 @@
-# $Id: Index.pm 33 2011-06-13 04:17:28Z stro $
+# $Id: Index.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite::Index;
 use strict;
@@ -12,7 +12,7 @@ use File::Basename;
 use File::Path;
 use LWP::Simple qw(getstore is_success);
 
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 unless ($ENV{CPAN_SQLITE_NO_LOG_FILES}) {
   $ENV{CPAN_SQLITE_DEBUG} = 1;
 }
@@ -162,7 +162,8 @@ sub error_fh {
   my $file = shift;
   open(my $tmp, '>', $file) or die "Cannot open $file: $!";
   close $tmp;
-  open(my $oldout, '>&', \*STDOUT);
+# Should be open(my $oldout, '>&', \*STDOUT); but it fails on 5.6.2
+  open(my $oldout, '>&STDOUT');
   open(STDOUT, '>', $file) or die "Cannot tie STDOUT to $file: $!";
   select STDOUT; $| = 1;
   return $oldout;

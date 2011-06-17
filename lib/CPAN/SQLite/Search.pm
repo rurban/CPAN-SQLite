@@ -1,4 +1,4 @@
-# $Id: Search.pm 33 2011-06-13 04:17:28Z stro $
+# $Id: Search.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite::Search;
 use strict;
@@ -9,7 +9,7 @@ use CPAN::SQLite::Util qw($mode_info);
 use CPAN::SQLite::DBI::Search;
 
 our $max_results = 0;
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 my $cdbi_query;
 
 my %mode2obj;

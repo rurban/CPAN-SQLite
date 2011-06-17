@@ -1,4 +1,4 @@
-# $Id: Info.pm 34 2011-06-13 04:35:00Z stro $
+# $Id: Info.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite::Info;
 use strict;
@@ -10,7 +10,7 @@ use File::Basename;
 use Safe;
 use CPAN::SQLite::Util qw(vcmp print_debug);
 
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 
 my $ext = qr/\.(tar\.gz|tar\.Z|tgz|zip)$/;
 

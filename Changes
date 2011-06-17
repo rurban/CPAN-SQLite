@@ -1,5 +1,9 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.201 Jun 16, 2001
+  - Fixed problem with 3-argument open with '>&' on 5.6.2
+  - Updated repository link
+
 0.200 Jun 11, 2011
   - SQLite REGEXP is used instead of custom function to prevent "Use of
     uninitialized value $x in pattern match" warning in modern Perl versions

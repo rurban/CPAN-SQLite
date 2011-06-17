@@ -1,9 +1,9 @@
-# $Id: Util.pm 31 2011-06-12 22:56:18Z stro $
+# $Id: Util.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite::Util;
 use strict;
 use warnings;
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 
 use base qw(Exporter);
 our (@EXPORT_OK, %chaps, %modes,

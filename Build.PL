@@ -1,4 +1,4 @@
-# $Id: Build.PL 33 2011-06-13 04:17:28Z stro $
+# $Id: Build.PL 35 2011-06-17 01:34:42Z stro $
 
 use strict;
 use warnings;
@@ -34,6 +34,11 @@ my $build = Module::Build->new(
   dist_version_from => 'lib/CPAN/SQLite.pm',
   dist_author => ['Serguei Trouchelle <stro@cpan.org>'],
   dist_abstract_from => 'lib/CPAN/SQLite.pm',
+    'meta_merge' => {
+        'resources'  => {
+            'repository' => 'http://svn.trouchelle.com/perlmodules/CPAN-SQLite/',
+        },
+    },
 );
 
 $build->create_build_script;

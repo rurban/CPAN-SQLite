@@ -1,4 +1,4 @@
-# $Id: SQLite.pm 33 2011-06-13 04:17:28Z stro $
+# $Id: SQLite.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite;
 use strict;
@@ -8,7 +8,7 @@ require File::Spec;
 use Cwd;
 require CPAN::SQLite::META;
 
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 
 # an array ref of distributions to ignore indexing
 my $ignore = [qw(SpreadSheet-WriteExcel-WebPivot)];

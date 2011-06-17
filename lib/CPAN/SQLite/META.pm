@@ -1,4 +1,4 @@
-# $Id: META.pm 33 2011-06-13 04:17:28Z stro $
+# $Id: META.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite::META;
 require CPAN::SQLite;
@@ -8,7 +8,7 @@ use base qw(Exporter);
 our @EXPORT_OK;
 @EXPORT_OK = qw(setup update);
 our $global_id;
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 
 # This is usually already defined in real life, but tests need it to be set
 $CPAN::FrontEnd ||= "CPAN::Shell";

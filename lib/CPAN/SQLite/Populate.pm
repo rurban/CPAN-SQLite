@@ -1,4 +1,4 @@
-# $Id: Populate.pm 31 2011-06-12 22:56:18Z stro $
+# $Id: Populate.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite::Populate;
 use strict;
@@ -14,7 +14,7 @@ use File::Path;
 
 our $dbh = $CPAN::SQLite::DBI::dbh;
 my ($setup);
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 
 my %tbl2obj;
 $tbl2obj{$_} = __PACKAGE__ . '::' . $_ 

@@ -1,11 +1,11 @@
-# $Id: DBI.pm 34 2011-06-13 04:35:00Z stro $
+# $Id: DBI.pm 35 2011-06-17 01:34:42Z stro $
 
 package CPAN::SQLite::DBI;
 use strict;
 use warnings;
 require File::Spec;
 use DBI;
-our $VERSION = '0.200';
+our $VERSION = '0.201';
 
 use base qw(Exporter);
 our ($dbh, $tables, @EXPORT_OK);

@@ -31,7 +31,7 @@ if ($eu_version >= 5.43) {
    $opts{AUTHOR} = 'Serguei Trouchelle <stro@cpan.org>';
 }
 if ($eu_version > 6.11 ) {
-  $opts{NO_META} = 1;
+  $opts{NO_META} = 0;
 }
 
 my $prereqs = {'File::Spec' => 0,
