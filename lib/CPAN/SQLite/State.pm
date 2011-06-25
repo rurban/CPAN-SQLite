@@ -7,7 +7,7 @@ no warnings qw(redefine);
 use CPAN::SQLite::DBI qw($dbh);
 use CPAN::SQLite::DBI::Index;
 use CPAN::SQLite::Util qw(has_hash_data print_debug);
-our $VERSION = '0.201';
+our $VERSION = '0.202';
 
 my %tbl2obj;
 $tbl2obj{$_} = __PACKAGE__ . '::' . $_ for (qw(dists mods auths));

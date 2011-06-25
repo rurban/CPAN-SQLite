@@ -1,4 +1,4 @@
-# $Id: TestConfig.pm 31 2011-06-12 22:56:18Z stro $
+# $Id: TestConfig.pm 36 2011-06-20 06:09:39Z stro $
 
 use Cwd;
 my $cwd = cwd;
@@ -51,7 +51,7 @@ $CPAN::Config = {
                  'term_is_latin' => q[0],
                  'term_ornaments' => q[0],
                  #'unzip' => q[/usr/bin/unzip],
-                 'urllist' => [qq[file:/$cwd/t/cpan]],
+                 'urllist' => [qq[file:$cwd/t/cpan]],
                  'use_sqlite' => q[1],
                  'wait_list' => [q[wait://ls6.informatik.uni-dortmund.de:1404]],
                  #'wget' => q[/usr/bin/wget],

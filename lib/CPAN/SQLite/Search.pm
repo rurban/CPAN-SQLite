@@ -9,7 +9,7 @@ use CPAN::SQLite::Util qw($mode_info);
 use CPAN::SQLite::DBI::Search;
 
 our $max_results = 0;
-our $VERSION = '0.201';
+our $VERSION = '0.202';
 my $cdbi_query;
 
 my %mode2obj;

@@ -14,7 +14,7 @@ use File::Path;
 
 our $dbh = $CPAN::SQLite::DBI::dbh;
 my ($setup);
-our $VERSION = '0.201';
+our $VERSION = '0.202';
 
 my %tbl2obj;
 $tbl2obj{$_} = __PACKAGE__ . '::' . $_ 

@@ -10,16 +10,20 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: CPAN-SQLite
+no_index:
+  file:
+    - t/dot-cpan/CPAN/TestConfig.pm
+    - t/lib/TestSQL.pm
 provides:
   CPAN::SQLite:
     file: lib/CPAN/SQLite.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::DBI:
     file: lib/CPAN/SQLite/DBI.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::DBI::Index:
     file: lib/CPAN/SQLite/DBI/Index.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::DBI::Index::auths:
     file: lib/CPAN/SQLite/DBI/Index.pm
   CPAN::SQLite::DBI::Index::chaps:
@@ -30,7 +34,7 @@ provides:
     file: lib/CPAN/SQLite/DBI/Index.pm
   CPAN::SQLite::DBI::Search:
     file: lib/CPAN/SQLite/DBI/Search.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::DBI::Search::auths:
     file: lib/CPAN/SQLite/DBI/Search.pm
   CPAN::SQLite::DBI::Search::chaps:
@@ -41,13 +45,13 @@ provides:
     file: lib/CPAN/SQLite/DBI/Search.pm
   CPAN::SQLite::Index:
     file: lib/CPAN/SQLite/Index.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::Info:
     file: lib/CPAN/SQLite/Info.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::META:
     file: lib/CPAN/SQLite/META.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::META::Author:
     file: lib/CPAN/SQLite/META.pm
   CPAN::SQLite::META::Bundle:
@@ -58,7 +62,7 @@ provides:
     file: lib/CPAN/SQLite/META.pm
   CPAN::SQLite::Populate:
     file: lib/CPAN/SQLite/Populate.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::Populate::auths:
     file: lib/CPAN/SQLite/Populate.pm
   CPAN::SQLite::Populate::chaps:
@@ -69,7 +73,7 @@ provides:
     file: lib/CPAN/SQLite/Populate.pm
   CPAN::SQLite::Search:
     file: lib/CPAN/SQLite/Search.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::Search::author:
     file: lib/CPAN/SQLite/Search.pm
   CPAN::SQLite::Search::dist:
@@ -78,7 +82,7 @@ provides:
     file: lib/CPAN/SQLite/Search.pm
   CPAN::SQLite::State:
     file: lib/CPAN/SQLite/State.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::State::auths:
     file: lib/CPAN/SQLite/State.pm
   CPAN::SQLite::State::dists:
@@ -87,7 +91,7 @@ provides:
     file: lib/CPAN/SQLite/State.pm
   CPAN::SQLite::Util:
     file: lib/CPAN/SQLite/Util.pm
-    version: 0.201
+    version: 0.202
   CPAN::SQLite::Version:
     file: lib/CPAN/SQLite/Util.pm
     version: 0.1
@@ -103,4 +107,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://svn.trouchelle.com/perlmodules/CPAN-SQLite/
-version: 0.201
+version: 0.202

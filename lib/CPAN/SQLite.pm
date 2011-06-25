@@ -8,7 +8,7 @@ require File::Spec;
 use Cwd;
 require CPAN::SQLite::META;
 
-our $VERSION = '0.201';
+our $VERSION = '0.202';
 
 # an array ref of distributions to ignore indexing
 my $ignore = [qw(SpreadSheet-WriteExcel-WebPivot)];
@@ -17,38 +17,44 @@ our $db_name = 'cpandb.sql';
 use constant WIN32 => $^O eq 'MSWin32';
 
 sub new {
-  my ($class, %args) = @_;
-  my ($CPAN, $update_indices);
-  my $db_dir = $args{db_dir};
-  my $urllist = [];
-  my $keep_source_where;
-  # for testing undr Darwin, must load CPAN::MyConfig contained
-  # in PERL5LIB, as File::HomeDir doesn't use this
-  if ($ENV{CPAN_SQLITE_TESTING}) {
-    eval {require CPAN::MyConfig;};
-  }
-  eval {require CPAN; CPAN::HandleConfig->load;};
-  if ( not $@ and not defined $args{CPAN} ) {
-    $CPAN = $CPAN::Config->{cpan_home};
-    $db_dir = $CPAN;
-    $keep_source_where = $CPAN::Config->{keep_source_where};
-    $urllist = $CPAN::Config->{urllist};
-    die qq{The '$CPAN' directory doesn't exist} unless -d $CPAN;
-    $update_indices = 0;
-  }
-  else {
-    $CPAN = $args{CPAN} || '';
-    die qq{Please specify the CPAN location} unless defined $CPAN;
-    die qq{The '$CPAN' directory doesn't exist} unless (-d $CPAN);
-    $update_indices = (-f File::Spec->catfile($CPAN, 'MIRRORING.FROM')) ?
-      0 : 1;
-  }
-  push @$urllist, q{http://www.cpan.org/};
-  $db_dir ||= cwd;
-  my $self = {%args, CPAN => $CPAN, update_indices => $update_indices,
-              db_name => $db_name, urllist => $urllist,
-              keep_source_where => $keep_source_where, db_dir => $db_dir};
-  return bless $self, $class;
+    my $class = shift;
+    my %args = @_;
+
+    my ($CPAN, $update_indices);
+    my $db_dir = $args{db_dir};
+    my $urllist = [];
+    my $keep_source_where;
+    # for testing undr Darwin, must load CPAN::MyConfig contained
+    # in PERL5LIB, as File::HomeDir doesn't use this
+    if ($ENV{CPAN_SQLITE_TESTING}) {
+      eval {require CPAN::MyConfig;};
+    }
+    eval {require CPAN; CPAN::HandleConfig->load;};
+    if ( not $@ and not defined $args{CPAN} ) {
+      $CPAN = $CPAN::Config->{cpan_home};
+      $db_dir = $CPAN;
+      $keep_source_where = $CPAN::Config->{keep_source_where};
+      $urllist = $CPAN::Config->{urllist};
+      # Sometimes this directory dosn't exist (like on new installations)
+      unless (-d $CPAN) {
+          eval { File::Path::mkpath($CPAN); }; # copied from CPAN.pm
+      }
+      die qq{The '$CPAN' directory doesn't exist} unless -d $CPAN;
+      $update_indices = 0;
+    }
+    else {
+      $CPAN = $args{CPAN} || '';
+      die qq{Please specify the CPAN location} unless defined $CPAN;
+      die qq{The '$CPAN' directory doesn't exist} unless (-d $CPAN);
+      $update_indices = (-f File::Spec->catfile($CPAN, 'MIRRORING.FROM')) ?
+        0 : 1;
+    }
+    push @$urllist, q{http://www.cpan.org/};
+    $db_dir ||= cwd;
+    my $self = {%args, CPAN => $CPAN, update_indices => $update_indices,
+                db_name => $db_name, urllist => $urllist,
+                keep_source_where => $keep_source_where, db_dir => $db_dir};
+    return bless $self, $class;
 }
 
 sub index {

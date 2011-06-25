@@ -1,6 +1,11 @@
 Revision history for Perl extension CPAN::SQLite.
 
-0.201 Jun 16, 2001
+0.202 Jun 25, 2011
+  - Fixed test configuration which caused problems on Cygwin
+  - Added message for misconfigured smokers when PERL5LIB is too long
+  - Added CPAN root directory creation in case it's missing
+
+0.201 Jun 16, 2011
   - Fixed problem with 3-argument open with '>&' on 5.6.2
   - Updated repository link
 

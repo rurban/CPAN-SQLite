@@ -9,7 +9,7 @@ use base qw(CPAN::SQLite::DBI);
 use CPAN::SQLite::DBI qw($tables $dbh);
 use CPAN::SQLite::Util qw($full_id);
 
-our $VERSION = '0.201';
+our $VERSION = '0.202';
 
 package CPAN::SQLite::DBI::Search::chaps;
 use base qw(CPAN::SQLite::DBI::Search);
