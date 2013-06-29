@@ -1,4 +1,4 @@
-# $Id: TestShell.pm 34 2011-06-13 04:35:00Z stro $
+# $Id: TestShell.pm 42 2013-06-29 20:44:17Z stro $
 
 package TestShell;
 use strict;
@@ -10,7 +10,7 @@ use CPAN;
 # can brake TAP output and mark some tests as out-of-sequence. To avoid this
 # problem, myprint and mywarn should be silenced.
 
-$CPAN::FrontEnd = 'TestShell'; 
+$CPAN::FrontEnd = 'TestShell';
 
 sub myprint {
     return;

@@ -1,14 +1,17 @@
-# $Id: SQLite.pm 35 2011-06-17 01:34:42Z stro $
+# $Id: SQLite.pm 42 2013-06-29 20:44:17Z stro $
 
 package CPAN::SQLite;
 use strict;
 use warnings;
+
+our $VERSION = '0.203';
+
+use English qw/-no_match_vars/;
+
 use File::HomeDir;
 require File::Spec;
 use Cwd;
 require CPAN::SQLite::META;
-
-our $VERSION = '0.202';
 
 # an array ref of distributions to ignore indexing
 my $ignore = [qw(SpreadSheet-WriteExcel-WebPivot)];
@@ -35,7 +38,7 @@ sub new {
       $db_dir = $CPAN;
       $keep_source_where = $CPAN::Config->{keep_source_where};
       $urllist = $CPAN::Config->{urllist};
-      # Sometimes this directory dosn't exist (like on new installations)
+      # Sometimes this directory doesn't exist (like on new installations)
       unless (-d $CPAN) {
           eval { File::Path::mkpath($CPAN); }; # copied from CPAN.pm
       }
@@ -60,9 +63,7 @@ sub new {
 sub index {
   my ($self, %args) = @_;
   require CPAN::SQLite::Index;
-  my %wanted = map {$_ => $self->{$_}} 
-    qw(CPAN ignore update_indices db_name db_dir
-       keep_source_where setup reindex urllist);
+  my %wanted = map {$_ => $self->{$_}} qw(CPAN ignore update_indices db_name db_dir keep_source_where setup reindex urllist);
   my $log_dir = $self->{CPAN} || $self->{db_dir};
   die qq{Please create the directory '$log_dir' first} unless -d $log_dir;
   my $index = CPAN::SQLite::Index->new(%wanted, %args, log_dir => $log_dir);
@@ -76,8 +77,7 @@ sub index {
 sub query {
   my ($self, %args) = @_;
   require CPAN::SQLite::Search;
-  my %wanted = map {$_ => $self->{$_}} 
-    qw(max_results CPAN db_name db_dir meta_obj);
+  my %wanted = map {$_ => $self->{$_}} qw(max_results CPAN db_name db_dir meta_obj);
   my $query = CPAN::SQLite::Search->new(%wanted, %args);
   %wanted = map {$_ => $self->{$_}} qw(mode query id name);
   $query->query(%wanted, %args) or do {
@@ -91,8 +91,6 @@ sub query {
 }
 
 1;
-
-__END__
 
 =head1 NAME
 
@@ -110,7 +108,7 @@ CPAN::SQLite - maintain and search a minimal CPAN database
 
 This package is used for setting up, maintaining, and
 searching a CPAN database consisting of the information
-stored in the three main CPAN indices: 
+stored in the three main CPAN indices:
 F<$CPAN/modules/03modlist.data.gz>,
 F<$CPAN/modules/02packages.details.txt.gz>, and
 F<$CPAN/authors/01mailrc.txt.gz>. It should be
@@ -137,7 +135,7 @@ configured, and are updated if they are more than one
 day old.
 
 If the C<CPAN> option is not given, it will default
-to C<cpan_home> of L<CPAN::>, if this is configured,
+to C<cpan_home> of L<CPAN>, if this is configured,
 with the index files found under C<keep_source_where>.
 A fatal error results if such a directory isn't found.
 Updates to these index files are assumed here to be
@@ -258,7 +256,7 @@ directory as the database file.
 L<CPAN::SQLite::Index>, for setting up and maintaining
 the database, and L<CPAN::SQLite::Search> for an
 interface to querying the database. Some details
-of the interaction with L<CPAN::> is available from
+of the interaction with L<CPAN> is available from
 L<CPAN::SQLite::META>. See also the L<cpandb> script for a
 command-line interface to the
 indexing and querying of the database.
@@ -307,7 +305,7 @@ distribution will not be present in the database; for example,
 at this time, the latest version of the I<libwww-perl> distribution
 on CPAN is 5.805, but there are modules such as I<URI::URL::finger>
 contained in version 5.10 of libwww-perl that are not present in 5.805.
-This behaviour differs from that of L<CPAN::> without CPAN::SQLite.
+This behaviour differs from that of L<CPAN> without CPAN::SQLite.
 This may change in the future.
 
 Please report bugs and feature requests via
@@ -319,7 +317,9 @@ Information messages from the indexing procedures are printed
 out to STDOUT if the environment variable CPAN_SQLITE_DEBUG
 is set. This is automatically set within L<CPAN::SQLite::Index>.
 If CPAN_SQLITE_NO_LOG_FILES is set, no log files will be created
-during the indexing procedures.
+during the indexing procedures. Log files are deleted automatically
+in 30 days. To override this, set CPAN_SQLITE_LOG_FILES_CLEANUP.
+To stop automatic cleanup, set this variable to 0.
 
 =head1 AUTHORS
 
@@ -331,7 +331,7 @@ Serguei Trouchelle E<lt>stro@cpan.orgE<gt>
 
 Copyright 2006,2008 by Randy Kobes E<lt>r.kobes@uwinnipeg.caE<gt>. 
 
-Copyright 2011 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
+Copyright 2011-2013 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
 
 Use and redistribution are under the same terms as Perl itself.
 

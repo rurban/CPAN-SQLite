@@ -14,7 +14,6 @@ lib/CPAN/SQLite/Util.pm
 Makefile.PL
 Build.PL
 MANIFEST            This list of files
-META.yml
 README
 Changes
 t/00compile.t
@@ -32,3 +31,5 @@ t/dot-cpan/CPAN/TestConfig.pm
 t/lib/TestShell.pm
 t/lib/TestSQL.pm
 
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)

@@ -1,17 +1,30 @@
-# $Id: DBI.pm 35 2011-06-17 01:34:42Z stro $
+# $Id: DBI.pm 42 2013-06-29 20:44:17Z stro $
 
 package CPAN::SQLite::DBI;
 use strict;
 use warnings;
+
+our $VERSION = '0.203';
+
+use English qw/-no_match_vars/;
+
 require File::Spec;
 use DBI;
-our $VERSION = '0.202';
 
-use base qw(Exporter);
+use parent 'Exporter';
 our ($dbh, $tables, @EXPORT_OK);
 @EXPORT_OK = qw($dbh $tables);
 
 $tables = {
+    'info' => {
+        'primary' => {
+            'status' => q!INTEGER NOT NULL PRIMARY KEY!,
+        },
+        'other'   => {},
+        'key'     => [],
+        'name'    => 'status',
+        'id'      => 'status',
+    },
            mods => {
                     primary => {mod_id => q{INTEGER NOT NULL PRIMARY KEY}},
                     other => {
@@ -127,8 +140,6 @@ sub db_error {
 
 
 1;
-
-__END__
 
 =head1 NAME
 

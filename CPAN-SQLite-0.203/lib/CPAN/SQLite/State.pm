@@ -1,16 +1,20 @@
-# $Id: State.pm 35 2011-06-17 01:34:42Z stro $
+# $Id: State.pm 42 2013-06-29 20:44:17Z stro $
 
 package CPAN::SQLite::State;
 use strict;
 use warnings;
 no warnings qw(redefine);
+
+our $VERSION = '0.203';
+
+use English qw/-no_match_vars/;
+
 use CPAN::SQLite::DBI qw($dbh);
 use CPAN::SQLite::DBI::Index;
 use CPAN::SQLite::Util qw(has_hash_data print_debug);
-our $VERSION = '0.202';
 
 my %tbl2obj;
-$tbl2obj{$_} = __PACKAGE__ . '::' . $_ for (qw(dists mods auths));
+$tbl2obj{$_} = __PACKAGE__ . '::' . $_ for (qw(dists mods auths info));
 my %obj2tbl = reverse %tbl2obj;
 
 our $dbh = $CPAN::SQLite::DBI::dbh;
@@ -23,7 +27,7 @@ sub new {
   }
 
   my $index = $args{index};
-  my @tables = qw(dists mods auths);
+  my @tables = qw(dists mods auths info);
   foreach my $table (@tables) {
     my $obj = $index->{$table};
     die "Please supply a CPAN::SQLite::Index::$table object"
@@ -54,7 +58,7 @@ sub state {
 
 sub create_objs {
   my $self = shift;
-  my @tables = qw(dists auths mods);
+  my @tables = qw(dists auths mods info);
 
   foreach my $table (@tables) {
     my $obj;
@@ -62,11 +66,12 @@ sub create_objs {
     my $index = $self->{index}->{$table};
     if ($index and ref($index) eq "CPAN::SQLite::Index::$table") {
       my $info = $index->{info};
-      return unless has_hash_data($info);
-      $obj = $pack->new(info => $info, 
+      if ($table ne 'info') {
+        return unless has_hash_data($info);
+      }
+      $obj = $pack->new(info => $info,
                         cdbi => $self->{cdbi}->{objs}->{$table});
-    }
-    else {
+    } else {
       $obj = $pack->new();
     }
     $self->{obj}->{$table} = $obj;
@@ -102,11 +107,16 @@ sub state_info {
       }
     }
   }
+
+  # Check "info"
+  if (my $obj = $self->{'obj'}->{'info'}) {
+    return unless $obj->state;
+  }
   return 1;
 }
 
 package CPAN::SQLite::State::auths;
-use base qw(CPAN::SQLite::State);
+use parent 'CPAN::SQLite::State';
 use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
@@ -176,7 +186,7 @@ sub state {
 }
 
 package CPAN::SQLite::State::dists;
-use base qw(CPAN::SQLite::State);
+use parent 'CPAN::SQLite::State';
 use CPAN::SQLite::Util qw(vcmp has_hash_data print_debug);
 
 sub new {
@@ -237,9 +247,7 @@ sub state {
   foreach my $distname (keys %$dists) {
     if (not defined $dist_versions->{$distname}) {
       $insert->{$distname}++;
-    }
-    elsif (vcmp($dists->{$distname}->{dist_vers}, 
-                       $dist_versions->{$distname}) > 0) {
+    } elsif (vcmp($dists->{$distname}->{dist_vers}, $dist_versions->{$distname}) > 0) {
       $update->{$distname} = $dist_ids->{$distname};
     }
   }
@@ -255,7 +263,7 @@ sub state {
 }
 
 package CPAN::SQLite::State::mods;
-use base qw(CPAN::SQLite::State);
+use parent 'CPAN::SQLite::State';
 use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
@@ -315,7 +323,7 @@ sub state {
         else {
           $insert->{$module}++;
         }
-      }   
+      }
     }
   }
 
@@ -350,6 +358,34 @@ sub state {
   return 1;
 }
 
+package CPAN::SQLite::State::info;
+use parent 'CPAN::SQLite::State';
+use CPAN::SQLite::Util qw(has_hash_data print_debug);
+
+sub new {
+  my ($class, %args) = @_;
+  my $cdbi = $args{cdbi};
+  die "No dbi object available"
+    unless ($cdbi and ref($cdbi) eq 'CPAN::SQLite::DBI::Index::info');
+  my $self = {
+              info => '',
+              insert => {},
+              update => {},
+              delete => {},
+              ids => {},
+              obj => {},
+              cdbi => $cdbi,
+              error_msg => '',
+              info_msg => '',
+             };
+  return bless $self, $class;
+}
+
+sub state {
+  my $self = shift;
+
+  return 1;
+}
 
 package CPAN::SQLite::State;
 
@@ -382,7 +418,7 @@ versions, if applicable, in the table.
 This method compares the information in the tables
 obtained from the C<ids> method to that from the
 CPAN indices and ppm repositories. One of three actions
-is then decided, which is subsequently acted upon in 
+is then decided, which is subsequently acted upon in
 I<CPAN::SQLite::Populate>.
 
 =over 3

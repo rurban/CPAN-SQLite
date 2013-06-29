@@ -1,4 +1,4 @@
-# $Id: 03info.t 31 2011-06-12 22:56:18Z stro $
+# $Id: 03info.t 42 2013-06-29 20:44:17Z stro $
 
 use strict;
 use warnings;
@@ -82,7 +82,7 @@ ok(not defined $info->{auths}->{ZZZ});
 ok(not defined $info->{mods}->{ZZZ});
 ok(not defined $info->{dists}->{ZZZ});
 
-my @tables = qw(dists mods auths);
+my @tables = qw(dists mods auths info);
 my $index;
 my $package = 'CPAN::SQLite::Index';
 foreach my $table(@tables) {
@@ -100,7 +100,8 @@ isa_ok($cdbi, 'CPAN::SQLite::DBI::Index');
 use CPAN::SQLite::Populate;
 my $pop = CPAN::SQLite::Populate->new(db_name => $db_name,
                                       db_dir => $db_dir,
-                                      setup => 1, CPAN => $CPAN,
+                                      setup => 1,
+                                      CPAN => $CPAN,
                                       index => $index);
 isa_ok($pop, 'CPAN::SQLite::Populate');
 $pop->populate();

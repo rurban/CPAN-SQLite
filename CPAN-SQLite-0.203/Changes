@@ -1,8 +1,25 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.203 Jun 29, 2013
+  - Automatically cleanup log files older than 30 days. Use 
+    CPAN_SQLITE_LOG_FILES_CLEANUP environment variable to override.
+     RT#76943: https://rt.cpan.org/Ticket/Update.html?id=76943
+    (reported by Nigel Horne)
+     See also RT#36411
+  - Fixed POD
+     RT#83818 :https://rt.cpan.org/Ticket/Display.html?id=83818
+    (reported by Alceu Rodrigues de Freitas Junior)
+  - Added additional checks to make sure cpandb.sql is correctly populated
+     RT#64628: https://rt.cpan.org/Ticket/Display.html?id=64628
+     RT#71323: https://rt.cpan.org/Ticket/Display.html?id=71323
+     RT#76197: https://rt.cpan.org/Ticket/Display.html?id=76197
+    (reported by Slaven Rezic, Alexandr Ciornii, Randy Stauner)
+  - Tests updated
+  - "base" replaced with "parent"
+  - Minor tweaks
+
 0.202 Jun 25, 2011
   - Fixed test configuration which caused problems on Cygwin
-  - Added message for misconfigured smokers when PERL5LIB is too long
   - Added CPAN root directory creation in case it's missing
 
 0.201 Jun 16, 2011

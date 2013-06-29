@@ -1,34 +1,38 @@
-# $Id: Search.pm 35 2011-06-17 01:34:42Z stro $
+# $Id: Search.pm 42 2013-06-29 20:44:17Z stro $
 
 package CPAN::SQLite::DBI::Search;
 
 use strict;
 use warnings;
 
-use base qw(CPAN::SQLite::DBI);
+our $VERSION = '0.203';
+
+use parent 'CPAN::SQLite::DBI';
 use CPAN::SQLite::DBI qw($tables $dbh);
 use CPAN::SQLite::Util qw($full_id);
 
-our $VERSION = '0.202';
+package CPAN::SQLite::DBI::Search::info;
+use parent 'CPAN::SQLite::DBI::Search';
+use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search::chaps;
-use base qw(CPAN::SQLite::DBI::Search);
+use parent 'CPAN::SQLite::DBI::Search';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search::mods;
-use base qw(CPAN::SQLite::DBI::Search);
+use parent 'CPAN::SQLite::DBI::Search';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search::dists;
-use base qw(CPAN::SQLite::DBI::Search);
+use parent 'CPAN::SQLite::DBI::Search';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search::auths;
-use base qw(CPAN::SQLite::DBI::Search);
+use parent 'CPAN::SQLite::DBI::Search';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search;
-use base qw(CPAN::SQLite::DBI);
+use parent 'CPAN::SQLite::DBI';
 use CPAN::SQLite::DBI qw($tables $dbh);
 use CPAN::SQLite::Util qw($full_id expand_dslip download %chaps);
 
@@ -82,8 +86,7 @@ sub fetch_and_set {
   my $meta_obj = $args{meta_obj};
   die "Please supply a CPAN::SQLite::Meta::* object"
     unless ($meta_obj and ref($meta_obj) =~ /^CPAN::SQLite::META/);
-  my @fields = ref($fields) eq 'ARRAY' ? 
-    @{$fields} : ($fields);
+  my @fields = ref($fields) eq 'ARRAY' ? @{$fields} : ($fields);
   my $sql = $self->sql_statement(%args) or do {
     $self->{error} = 'Error constructing sql statement: ' .
       $self->{error};
@@ -129,7 +132,7 @@ sub fetch_and_set {
       }
       else {
     $self->extra_info(\%tmp);
-    $meta_obj->set_data(\%tmp); 
+    $meta_obj->set_data(\%tmp);
     if ($want_ids) {
       my $download = download($tmp{cpanid}, $tmp{dist_file});
       push @{$meta_results}, {dist_id => $tmp{dist_id},
@@ -171,8 +174,7 @@ sub sql_statement {
   my $table = $args{table};
 
   my $fields = $args{fields};
-  my @fields = ref($fields) eq 'ARRAY' ? 
-    @{$fields} : ($fields);
+  my @fields = ref($fields) eq 'ARRAY' ? @{$fields} : ($fields);
   for (@fields) {
     $_ = $full_id->{$_} if $full_id->{$_};
   }
@@ -194,12 +196,12 @@ sub sql_statement {
     $value =~ s{\\}{}g;
       }
       $where = $use_like ?
-    qq{$name LIKE '$prepend$value%'} : 
+    qq{$name LIKE '$prepend$value%'} :
       qq{$name REGEXP '(?i:$value)'};
 
       if ($name eq 'cpanid') {
     $where .= $use_like ?
-      qq{ OR $text LIKE '$prepend$value%'} : 
+      qq{ OR $text LIKE '$prepend$value%'} :
         qq{ OR $text REGEXP '(?i:$value)'};
       }
       last QUERY;
@@ -254,8 +256,6 @@ sub sql_statement {
 }
 
 1;
-
-__END__
 
 =head1 NAME
 

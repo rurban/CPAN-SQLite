@@ -1,23 +1,28 @@
-# $Id: Index.pm 35 2011-06-17 01:34:42Z stro $
+# $Id: Index.pm 42 2013-06-29 20:44:17Z stro $
 
 package CPAN::SQLite::DBI::Index;
-use CPAN::SQLite::DBI qw($dbh);
-use base qw(CPAN::SQLite::DBI);
-
 use strict;
 use warnings;
-our $VERSION = '0.202';
+
+our $VERSION = '0.203';
+
+use CPAN::SQLite::DBI qw($dbh);
+use parent 'CPAN::SQLite::DBI';
+
+package CPAN::SQLite::DBI::Index::info;
+use parent 'CPAN::SQLite::DBI::Index';
+use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Index::chaps;
-use base qw(CPAN::SQLite::DBI::Index);
+use parent 'CPAN::SQLite::DBI::Index';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Index::mods;
-use base qw(CPAN::SQLite::DBI::Index);
+use parent 'CPAN::SQLite::DBI::Index';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Index::dists;
-use base qw(CPAN::SQLite::DBI::Index);
+use parent 'CPAN::SQLite::DBI::Index';
 use CPAN::SQLite::DBI qw($dbh);
 
 sub fetch_ids {
@@ -44,7 +49,7 @@ sub fetch_ids {
 }
 
 package CPAN::SQLite::DBI::Index::auths;
-use base qw(CPAN::SQLite::DBI::Index);
+use parent 'CPAN::SQLite::DBI::Index';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Index;
@@ -191,8 +196,6 @@ sub sth_delete {
 }
 
 1;
-
-__END__
 
 =head1 NAME
 

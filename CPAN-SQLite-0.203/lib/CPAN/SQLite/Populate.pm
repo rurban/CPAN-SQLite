@@ -1,9 +1,14 @@
-# $Id: Populate.pm 35 2011-06-17 01:34:42Z stro $
+# $Id: Populate.pm 42 2013-06-29 20:44:17Z stro $
 
 package CPAN::SQLite::Populate;
 use strict;
 use warnings;
 no warnings qw(redefine);
+
+our $VERSION = '0.203';
+
+use English qw/-no_match_vars/;
+
 use CPAN::SQLite::Util qw($table_id has_hash_data print_debug);
 use CPAN::SQLite::DBI::Index;
 use CPAN::SQLite::DBI qw($dbh);
@@ -14,11 +19,9 @@ use File::Path;
 
 our $dbh = $CPAN::SQLite::DBI::dbh;
 my ($setup);
-our $VERSION = '0.202';
 
 my %tbl2obj;
-$tbl2obj{$_} = __PACKAGE__ . '::' . $_ 
-    for (qw(dists mods auths chaps));
+$tbl2obj{$_} = __PACKAGE__ . '::' . $_  foreach (qw(dists mods auths chaps info));
 my %obj2tbl  = reverse %tbl2obj;
 
 sub new {
@@ -27,7 +30,7 @@ sub new {
   $setup = $args{setup};
 
   my $index = $args{index};
-  my @tables = qw(dists mods auths);
+  my @tables = qw(dists mods auths info);
   foreach my $table (@tables) {
     my $obj = $index->{$table};
     die "Please supply a CPAN::SQLite::Index::$table object"
@@ -71,7 +74,7 @@ sub populate {
 
 sub create_objs {
   my $self = shift;
-  my @tables = qw(dists auths mods chaps);
+  my @tables = qw(dists auths mods chaps info);
 
   foreach my $table (@tables) {
     my $obj;
@@ -79,7 +82,9 @@ sub create_objs {
     my $index = $self->{index}->{$table};
     if ($index and ref($index) eq "CPAN::SQLite::Index::$table") {
       my $info = $index->{info};
-      return unless has_hash_data($info);
+      if ($table ne 'info') {
+        return unless has_hash_data($info);
+      }
       $obj = $pack->new(info => $info,
                         cdbi => $self->{cdbi}->{objs}->{$table});
     }
@@ -113,6 +118,14 @@ sub create_objs {
 sub populate_tables {
   my $self = shift;
   my @methods = $setup ? qw(insert) : qw(insert update delete);
+
+  # Reset status
+  my $info_obj = $self->{'obj'}->{'info'};
+  unless ($info_obj->delete) {
+    print_debug('Fatal error from ', ref($info_obj), ':', $info_obj->{'error_msg'});
+    return;
+  }
+  
   my @tables = qw(auths dists mods chaps);
   for my $method (@methods) {
     for my $table (@tables) {
@@ -129,11 +142,18 @@ sub populate_tables {
       }
     }
   }
+
+  # Update status
+  unless ($info_obj->insert) {
+    print_debug('Fatal error from ', ref($info_obj), ':', $info_obj->{'error_msg'});
+    return;
+  }
+  
   return 1;
 }
 
 package CPAN::SQLite::Populate::auths;
-use base qw(CPAN::SQLite::Populate);
+use parent 'CPAN::SQLite::Populate';
 use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
@@ -186,7 +206,7 @@ sub insert {
         $self->{error_msg} = $cdbi->{error_msg};
         return;
       };
-    $auth_ids->{$cpanid} = 
+    $auth_ids->{$cpanid} =
       $dbh->func('last_insert_rowid') or do {
         $cdbi->db_error($sth);
         $self->{error_msg} = $cdbi->{error_msg};
@@ -248,7 +268,7 @@ sub delete {
 }
 
 package CPAN::SQLite::Populate::dists;
-use base qw(CPAN::SQLite::Populate);
+use parent 'CPAN::SQLite::Populate';
 use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
@@ -354,8 +374,8 @@ sub update {
     my $cpanid = $values->{cpanid};
     next unless ($values and $cpanid and $auth_ids->{$cpanid});
     print_debug("Updating $distname of $cpanid\n");
-    $sth->execute($auth_ids->{$values->{cpanid}}, $distname, 
-                  $values->{dist_file}, $values->{dist_vers}, 
+    $sth->execute($auth_ids->{$values->{cpanid}}, $distname,
+                  $values->{dist_file}, $values->{dist_vers},
                   $values->{dist_abs}, $values->{dslip}) or do {
                     $cdbi->db_error($sth);
                     $self->{error_msg} = $cdbi->{error_msg};
@@ -405,7 +425,7 @@ sub delete {
 }
 
 package CPAN::SQLite::Populate::mods;
-use base qw(CPAN::SQLite::Populate);
+use parent 'CPAN::SQLite::Populate';
 use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
@@ -577,7 +597,7 @@ sub delete {
 }
 
 package CPAN::SQLite::Populate::chaps;
-use base qw(CPAN::SQLite::Populate);
+use parent 'CPAN::SQLite::Populate';
 use CPAN::SQLite::Util qw(has_hash_data print_debug);
 
 sub new {
@@ -717,7 +737,7 @@ sub delete {
     $self->{info_msg} = q{No chap data to delete};
     return;
   }
-  
+
   my $sth = $cdbi->sth_delete('dist_id');
   foreach my $distname(keys %$data) {
     $sth->execute($data->{$distname}) or do {
@@ -726,6 +746,82 @@ sub delete {
       return;
     };
   }
+  $sth->finish();
+  undef $sth;
+  $dbh->commit() or do {
+    $cdbi->db_error();
+    $self->{error_msg} = $cdbi->{error_msg};
+    return;
+  };
+  return 1;
+}
+
+package CPAN::SQLite::Populate::info;
+use parent 'CPAN::SQLite::Populate';
+use CPAN::SQLite::Util qw(has_hash_data print_debug);
+
+sub new {
+  my ($class, %args) = @_;
+  my $cdbi = $args{cdbi};
+  die "No dbi object available"
+    unless ($cdbi and ref($cdbi) eq 'CPAN::SQLite::DBI::Index::info');
+  my $self = {
+              obj => {},
+              cdbi => $cdbi,
+              error_msg => '',
+              info_msg => '',
+             };
+  return bless $self, $class;
+}
+
+sub insert {
+  my $self = shift;
+  unless ($dbh) {
+    $self->{error_msg} = q{No db handle available};
+    return;
+  }
+  my $cdbi = $self->{cdbi};
+
+  my $sth = $cdbi->sth_insert(['status']) or do {
+    $self->{error_msg} = $cdbi->{error_msg};
+    return;
+  };
+  $sth->execute(1)
+          or do {
+            $cdbi->db_error($sth);
+            $self->{error_msg} = $cdbi->{error_msg};
+            return;
+          };
+  $sth->finish();
+  undef $sth;
+  $dbh->commit() or do {
+    $cdbi->db_error();
+    $self->{error_msg} = $cdbi->{error_msg};
+    return;
+  };
+  return 1;
+}
+
+sub update {
+  my $self = shift;
+  $self->{'error_msg'} = 'update is not a valid call';
+  return;
+}
+
+sub delete {
+  my $self = shift;
+  unless ($dbh) {
+    $self->{error_msg} = q{No db handle available};
+        return;
+  }
+  my $cdbi = $self->{cdbi};
+
+  my $sth = $cdbi->sth_delete('status');
+  $sth->execute(1) or do {
+      $cdbi->db_error($sth);
+      $self->{error_msg} = $cdbi->{error_msg};
+      return;
+    };
   $sth->finish();
   undef $sth;
   $dbh->commit() or do {
@@ -749,8 +845,6 @@ sub db_error {
 }
 
 1;
-
-__END__
 
 =head1 NAME
 

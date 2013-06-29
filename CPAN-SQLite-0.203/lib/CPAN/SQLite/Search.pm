@@ -1,15 +1,20 @@
-# $Id: Search.pm 35 2011-06-17 01:34:42Z stro $
+# $Id: Search.pm 42 2013-06-29 20:44:17Z stro $
 
 package CPAN::SQLite::Search;
 use strict;
 use warnings;
 no warnings qw(redefine);
+
+our $VERSION = '0.203';
+
+use English qw/-no_match_vars/;
+
 use utf8;
 use CPAN::SQLite::Util qw($mode_info);
 use CPAN::SQLite::DBI::Search;
 
 our $max_results = 0;
-our $VERSION = '0.202';
+
 my $cdbi_query;
 
 my %mode2obj;
@@ -97,7 +102,7 @@ sub make {
 }
 
 package CPAN::SQLite::Search::author;
-use base qw(CPAN::SQLite::Search);
+use parent 'CPAN::SQLite::Search';
 
 sub search {
   my ($self, %args) = @_;
@@ -137,14 +142,12 @@ sub search {
     next unless ($dists = $cdbi->fetch(%args, search => $search));
     $item->{dists} = (ref($dists) eq 'ARRAY') ? $dists : [$dists];
   }
-  $self->{results} = 
-    (ref($results) eq 'ARRAY' and scalar @$results == 1) ?
-      $results->[0] : $results;
+  $self->{results} = (ref($results) eq 'ARRAY' and scalar @$results == 1) ? $results->[0] : $results;
   return 1;
 }
 
 package CPAN::SQLite::Search::module;
-use base qw(CPAN::SQLite::Search);
+use parent 'CPAN::SQLite::Search';
 
 sub search {
   my ($self, %args) = @_;
@@ -164,7 +167,7 @@ sub search {
     $args{limit} = $max_results;
   }
   my $results;
-  return unless $results = ($meta_obj ? 
+  return unless $results = ($meta_obj ?
                             $cdbi->fetch_and_set(%args, want_ids => 1) :
                             $cdbi->fetch(%args));
 # if running under CPAN.pm, need to build a list of modules
@@ -187,7 +190,7 @@ sub search {
                    };
       $seen{$dist_id}++;
       my $mods;
-      next unless $mods = $cdbi->fetch_and_set(%args, 
+      next unless $mods = $cdbi->fetch_and_set(%args,
                                                search => $search,
                                                set_list => 1,
                                                download => $item->{download});
@@ -202,7 +205,7 @@ sub search {
 }
 
 package CPAN::SQLite::Search::dist;
-use base qw(CPAN::SQLite::Search);
+use parent 'CPAN::SQLite::Search';
 
 sub search {
   my ($self, %args) = @_;
@@ -236,7 +239,7 @@ sub search {
                  };
     my $mods;
     next unless $mods = ($meta_obj ?
-                         $cdbi->fetch_and_set(%args, 
+                         $cdbi->fetch_and_set(%args,
                                               search => $search,
                                               set_list => 1,
                                               download => $item->{download}) :
@@ -270,8 +273,6 @@ sub dist_subchapter {
 
 1;
 
-__END__
-
 =head1 NAME
 
 CPAN::SQLite::Search - perform queries on the database
@@ -288,7 +289,7 @@ CPAN::SQLite::Search - perform queries on the database
 =head1 CONSTRUCTING THE QUERY
 
 This module queries the database via various types of queries
-and returns the results for subsequent display. The 
+and returns the results for subsequent display. The
 C<CPAN::SQLite::Search> object is created via the C<new> method as
 
   my $query = CPAN::SQLite::Search->new(db_dir => $db_dir,
@@ -522,7 +523,7 @@ Serguei Trouchelle E<lt>stro@cpan.orgE<gt>
 
 Copyright 2006,2008 by Randy Kobes E<lt>r.kobes@uwinnipeg.caE<gt>. 
 
-Copyright 2011 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
+Copyright 2011-2013 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
 
 Use and redistribution are under the same terms as Perl itself.
 

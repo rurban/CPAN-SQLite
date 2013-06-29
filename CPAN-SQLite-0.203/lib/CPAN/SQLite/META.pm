@@ -1,14 +1,20 @@
-# $Id: META.pm 35 2011-06-17 01:34:42Z stro $
+# $Id: META.pm 42 2013-06-29 20:44:17Z stro $
 
 package CPAN::SQLite::META;
-require CPAN::SQLite;
 use strict;
 use warnings;
-use base qw(Exporter);
+our $VERSION = '0.203';
+
+use English qw/-no_match_vars/;
+
+require CPAN::SQLite;
+use DBI;
+use File::Spec;
+
+use parent 'Exporter';
 our @EXPORT_OK;
-@EXPORT_OK = qw(setup update);
+@EXPORT_OK = qw(setup update check);
 our $global_id;
-our $VERSION = '0.202';
 
 # This is usually already defined in real life, but tests need it to be set
 $CPAN::FrontEnd ||= "CPAN::Shell";
@@ -46,7 +52,7 @@ sub make_obj {
 }
 
 package CPAN::SQLite::META::Author;
-use base qw(CPAN::SQLite::META);
+use parent 'CPAN::SQLite::META';
 use CPAN::SQLite::Util qw(has_hash_data);
 
 sub set_one {
@@ -74,7 +80,7 @@ sub set_data {
 }
 
 package CPAN::SQLite::META::Distribution;
-use base qw(CPAN::SQLite::META);
+use parent 'CPAN::SQLite::META';
 use CPAN::SQLite::Util qw(has_hash_data download);
 use CPAN::DistnameInfo;
 my $ext = qr{\.(tar\.gz|tar\.Z|tgz|zip)$};
@@ -118,7 +124,7 @@ sub set_list_data {
 }
 
 package CPAN::SQLite::META::Module;
-use base qw(CPAN::SQLite::META);
+use parent 'CPAN::SQLite::META';
 use CPAN::SQLite::Util qw(has_hash_data);
 
 sub set_one {
@@ -157,7 +163,7 @@ sub set_list_data {
 }
 
 package CPAN::SQLite::META::Bundle;
-use base qw(CPAN::SQLite::META);
+use parent 'CPAN::SQLite::META';
 use CPAN::SQLite::Util qw(has_hash_data);
 
 sub set_one {
@@ -309,11 +315,18 @@ sub reload {
     $CPAN::FrontEnd->mywarn('Database locked - cannot update.');
     return;
   }
-  my @args = ($^X, '-MCPAN::SQLite::META=setup,update', '-e');
+  my @args = ($^X, '-MCPAN::SQLite::META=setup,update,check', '-e');
   if (-e $db && -s _) {
     my $mtime_db = (stat(_))[9];
     my $time_string = gmtime_string($mtime_db);
     $CPAN::FrontEnd->myprint("Database was generated on $time_string\n");
+
+    # Check for status, force update if it fails
+    if (system(@args, 'check')) {
+      $force = 1;
+      $CPAN::FrontEnd->myprint("Database file requires reindexing\n");
+    }
+
     unless ($force) {
       return if (($time - $mtime_db) < $CPAN::Config->{index_expire}*86400);
     }
@@ -330,7 +343,7 @@ sub reload {
     $CPAN::SQLite::DBI::dbh = undef;
   }
   system(@args) == 0 or die qq{system @args failed: $?};
-  $CPAN::FrontEnd->myprint('Done!');
+  $CPAN::FrontEnd->myprint("Done!\n");
   return 1;
 }
 
@@ -343,6 +356,34 @@ sub setup {
 sub update {
   my $obj = CPAN::SQLite->new();
   $obj->index() or die qq{CPAN::SQLite update failed};
+  return;
+}
+
+sub check {
+  my $obj = CPAN::SQLite->new();
+  my $db = File::Spec->catfile($obj->{'db_dir'}, $obj->{'db_name'});
+  my $dbh = DBI->connect("DBI:SQLite:$db", '', '', {'RaiseError' => 0, 'PrintError' => 0, 'AutoCommit' => 1});
+  if (my $sth = $dbh->prepare('SELECT status FROM info WHERE status = 1')) {
+    if ($sth->execute()) {
+      if ($sth->fetchrow_arrayref()) {
+        exit 0; # status = 1
+      } else {
+        exit 1; # status <> 1, need reindexing
+      }
+    } else {
+      # Something's wrong, will be safer to reinitialize
+      $dbh->disconnect();
+      undef $dbh;
+      setup();
+      update();
+    }
+  } else {
+    # Probably old version of DB or no DB at all, run setup and update
+    $dbh->disconnect();
+    undef $dbh;
+    setup();
+    update();
+  }
   return;
 }
 
@@ -368,8 +409,6 @@ sub extract_distinfo {
 }
 
 1;
-
-__END__
 
 =head1 NAME
 
@@ -426,7 +465,7 @@ or C<module> mode, and if results are found, calls
                           %attributes
                          );
 
-for each match to register an instance of this class 
+for each match to register an instance of this class
 within C<CPAN.pm>.
 
 =back
