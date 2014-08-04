@@ -1,10 +1,10 @@
-# $Id: SQLite.pm 42 2013-06-29 20:44:17Z stro $
+# $Id: SQLite.pm 43 2014-08-04 06:51:27Z stro $
 
 package CPAN::SQLite;
 use strict;
 use warnings;
 
-our $VERSION = '0.203';
+our $VERSION = '0.204';
 
 use English qw/-no_match_vars/;
 
@@ -331,7 +331,7 @@ Serguei Trouchelle E<lt>stro@cpan.orgE<gt>
 
 Copyright 2006,2008 by Randy Kobes E<lt>r.kobes@uwinnipeg.caE<gt>. 
 
-Copyright 2011-2013 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
+Copyright 2011-2014 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
 
 Use and redistribution are under the same terms as Perl itself.
 

@@ -1,10 +1,10 @@
-# $Id: DBI.pm 42 2013-06-29 20:44:17Z stro $
+# $Id: DBI.pm 43 2014-08-04 06:51:27Z stro $
 
 package CPAN::SQLite::DBI;
 use strict;
 use warnings;
 
-our $VERSION = '0.203';
+our $VERSION = '0.204';
 
 use English qw/-no_match_vars/;
 
@@ -89,7 +89,10 @@ sub new {
   my $db_dir = $args{db_dir} || $args{CPAN};
   my $db = File::Spec->catfile($db_dir, $args{db_name});
   $dbh ||= DBI->connect("DBI:SQLite:$db", '', '',
-                        {RaiseError => 1, AutoCommit => 0});
+    {
+      RaiseError => 1, AutoCommit => 0,
+      sqlite_use_immediate_transaction => 0,
+    });
   die "Cannot connect to $db" unless $dbh;
   $dbh->{AutoCommit} = 0;
 

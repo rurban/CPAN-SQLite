@@ -1,5 +1,10 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.204 Aug 04, 2014
+  - Fixed problem with locked database in DBD::SQLite 1.38_01 and higher
+     RT#90635: https://rt.cpan.org/Ticket/Display.html?id=90635
+     (reported by Alexandr Ciornii)
+
 0.203 Jun 29, 2013
   - Automatically cleanup log files older than 30 days. Use 
     CPAN_SQLITE_LOG_FILES_CLEANUP environment variable to override.

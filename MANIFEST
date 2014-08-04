@@ -31,5 +31,4 @@ t/dot-cpan/CPAN/TestConfig.pm
 t/lib/TestShell.pm
 t/lib/TestSQL.pm
 
-META.yml                                 Module YAML meta-data (added by MakeMaker)
-META.json                                Module JSON meta-data (added by MakeMaker)
+META.yml                                 Module meta-data (added by MakeMaker)
