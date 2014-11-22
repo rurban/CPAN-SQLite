@@ -313,6 +313,10 @@ __END__
 
 CPAN::SQLite::Util - export some common data structures used by CPAN::SQLite::*
 
+=head1 VERSION
+
+version 0.205
+
 =head1 DESCRIPTION
 
 This module exports some common data structures used by other

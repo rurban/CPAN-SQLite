@@ -261,6 +261,10 @@ sub sql_statement {
 
 CPAN::SQLite::DBI::Search - DBI information for searching the CPAN::SQLite database
 
+=head1 VERSION
+
+version 0.205
+
 =head1 DESCRIPTION
 
 This module provides methods for L<CPAN::SQLite::Search> for searching

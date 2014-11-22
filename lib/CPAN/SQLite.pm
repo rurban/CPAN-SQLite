@@ -96,6 +96,10 @@ sub query {
 
 CPAN::SQLite - maintain and search a minimal CPAN database
 
+=head1 VERSION
+
+version 0.205
+
 =head1 SYNOPSIS
 
   my $obj = CPAN::SQLite->new(CPAN => '/path/to/CPAN');

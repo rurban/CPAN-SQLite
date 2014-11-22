@@ -397,6 +397,10 @@ __END__
 
 CPAN::SQLite::State - get state information on the database
 
+=head1 VERSION
+
+version 0.205
+
 =head1 DESCRIPTION
 
 This module gets information on the current state of the
@@ -444,4 +448,3 @@ in the indices, the information is marked for deletion.
 =back
 
 =cut
-

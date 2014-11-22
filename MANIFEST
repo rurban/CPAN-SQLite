@@ -21,9 +21,9 @@ t/01basic.t
 t/02drop.t
 t/03info.t
 t/04search.t
+t/04search_everything.t
 t/05meta_new.t
 t/05meta_update.t
-t/06search_everything.t
 t/cpan/authors/01mailrc.txt.gz
 t/cpan/modules/02packages.details.txt.gz
 t/cpan/modules/03modlist.data.gz
@@ -31,4 +31,3 @@ t/dot-cpan/CPAN/TestConfig.pm
 t/lib/TestShell.pm
 t/lib/TestSQL.pm
 
-META.yml                                 Module meta-data (added by MakeMaker)

@@ -1,5 +1,8 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.205 Nov 22, 2014
+  - Fixed test failures
+
 0.204 Aug 04, 2014
   - Fixed problem with locked database in DBD::SQLite 1.38_01 and higher
      RT#90635: https://rt.cpan.org/Ticket/Display.html?id=90635

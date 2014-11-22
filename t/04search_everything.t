@@ -1,4 +1,4 @@
-# $Id: 06search_everything.t 34 2011-06-13 04:35:00Z stro $
+# $Id: 04search_everything.t 44 2014-11-22 08:15:20Z stro $
 
 use strict;
 use warnings;

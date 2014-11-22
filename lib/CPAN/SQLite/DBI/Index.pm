@@ -201,6 +201,10 @@ sub sth_delete {
 
 CPAN::SQLite::DBI::Index - DBI information for indexing the CPAN::SQLite database
 
+=head1 VERSION
+
+version 0.205
+
 =head1 DESCRIPTION
 
 This module provides various methods for L<CPAN::SQLite::Index> in
@@ -238,4 +242,3 @@ values from a table.
 L<CPAN::SQLite::Index>
 
 =cut
-

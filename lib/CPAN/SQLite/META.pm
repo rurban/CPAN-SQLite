@@ -414,6 +414,10 @@ sub extract_distinfo {
 
 CPAN::SQLite::META - helper module for CPAN.pm integration
 
+=head1 VERSION
+
+version 0.205
+
 =head1 DESCRIPTION
 
 This module has no direct public interface, but is intended
@@ -528,4 +532,3 @@ given, will force a rebuilding of the database regardless
 of the time difference.
 
 =cut
-

@@ -850,6 +850,10 @@ sub db_error {
 
 CPAN::SQLite::Populate - create and populate database tables
 
+=head1 VERSION
+
+version 0.205
+
 =head1 DESCRIPTION
 
 This module is responsible for creating the tables

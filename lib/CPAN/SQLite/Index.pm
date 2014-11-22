@@ -202,6 +202,10 @@ sub DESTROY {
 
 CPAN::SQLite::Index - set up or update database tables.
 
+=head1 VERSION
+
+version 0.205
+
 =head1 SYNOPSIS
 
  my $index = CPAN::SQLite::Index->new(setup => 1);

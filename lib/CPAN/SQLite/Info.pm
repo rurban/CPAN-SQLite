@@ -241,6 +241,10 @@ sub trim {
 
 CPAN::SQLite::Info - extract information from CPAN indices
 
+=head1 VERSION
+
+version 0.205
+
 =head1 DESCRIPTION
 
 This module extracts information from the CPAN indices
@@ -337,4 +341,3 @@ hash reference with keys of
 L<CPAN::SQLite::Index>
 
 =cut
-

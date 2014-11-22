@@ -148,6 +148,10 @@ sub db_error {
 
 CPAN::SQLite::DBI - DBI information for the CPAN::SQLite database
 
+=head1 VERSION
+
+version 0.205
+
 =head1 DESCRIPTION
 
 This module is used by L<CPAN::SQLite::Index> and

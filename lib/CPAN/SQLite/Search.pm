@@ -277,6 +277,10 @@ sub dist_subchapter {
 
 CPAN::SQLite::Search - perform queries on the database
 
+=head1 VERSION
+
+version 0.205
+
 =head1 SYNOPSIS
 
   my $max_results = 200;
@@ -528,4 +532,3 @@ Copyright 2011-2013 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
 Use and redistribution are under the same terms as Perl itself.
 
 =cut
-
