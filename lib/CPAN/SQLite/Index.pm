@@ -1,10 +1,10 @@
-# $Id: Index.pm 42 2013-06-29 20:44:17Z stro $
+# $Id: Index.pm 45 2014-12-09 07:52:52Z stro $
 
 package CPAN::SQLite::Index;
 use strict;
 use warnings;
 
-our $VERSION = '0.203';
+our $VERSION = '0.206';
 
 use English qw/-no_match_vars/;
 
@@ -202,10 +202,6 @@ sub DESTROY {
 
 CPAN::SQLite::Index - set up or update database tables.
 
-=head1 VERSION
-
-version 0.205
-
 =head1 SYNOPSIS
 
  my $index = CPAN::SQLite::Index->new(setup => 1);
@@ -279,9 +275,9 @@ Unless the C<setup> argument within the C<new>
 method of L<CPAN::SQLite::Index> is specified,
 this will get information on the state of the database
 through L<CPAN::SQLite::State>.
-A comparision is then made between this information
+A comparison is then made between this information
 and that gathered from the CPAN indices, and if there's
-a discrepency in some items, those items are marked
+a discrepancy in some items, those items are marked
 for either insertion, updating, or deletion, as appropriate.
 
 =item * populate the database

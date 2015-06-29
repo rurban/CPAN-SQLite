@@ -1,11 +1,11 @@
-# $Id: Populate.pm 42 2013-06-29 20:44:17Z stro $
+# $Id: Populate.pm 45 2014-12-09 07:52:52Z stro $
 
 package CPAN::SQLite::Populate;
 use strict;
 use warnings;
 no warnings qw(redefine);
 
-our $VERSION = '0.203';
+our $VERSION = '0.206';
 
 use English qw/-no_match_vars/;
 
@@ -850,10 +850,6 @@ sub db_error {
 
 CPAN::SQLite::Populate - create and populate database tables
 
-=head1 VERSION
-
-version 0.205
-
 =head1 DESCRIPTION
 
 This module is responsible for creating the tables
@@ -963,7 +959,7 @@ F<My-Distname-0.22.tar.gz>, C<dist_vers> will be C<0.22>).
 
 =item * dist_abs
 
-This is a description of the distribtion. If not directly
+This is a description of the distribution. If not directly
 supplied, the description for, eg, C<Foo::Bar>, if present, will 
 be used for the C<Foo-Bar> distribution.
 

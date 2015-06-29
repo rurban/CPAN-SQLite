@@ -3,45 +3,30 @@ abstract: 'maintain and search a minimal CPAN database'
 author:
   - 'Serguei Trouchelle <stro@cpan.org>'
 build_requires:
-  CPAN::HandleConfig: 0
-  CPAN::Version: 0
-  Config: 0
-  DBD::SQLite: 0
-  File::Copy: 0
-  File::Temp: 0
-  FindBin: 0
-  Test::More: 0
-  base: 0
+  ExtUtils::MakeMaker: '0'
 configure_requires:
-  ExtUtils::MakeMaker: 6.30
-dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300010, CPAN::Meta::Converter version 2.131560'
-license: perl
+  ExtUtils::MakeMaker: '0'
+dynamic_config: 1
+generated_by: 'ExtUtils::MakeMaker version 6.98, CPAN::Meta::Converter version 2.150005'
+license: unknown
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: CPAN-SQLite
+no_index:
+  directory:
+    - t
+    - inc
 requires:
-  CPAN: 0
-  CPAN::DistnameInfo: 0
-  Compress::Zlib: 0
-  Cwd: 0
-  DBI: 0
-  English: 0
-  Exporter: 0
-  File::Basename: 0
-  File::Find: 0
-  File::HomeDir: 0
-  File::Path: 0
-  File::Spec: 0
-  File::Spec::Functions: 0
-  Getopt::Long: 0
-  LWP::Simple: 0
-  Safe: 0
-  constant: 0
-  parent: 0
-  perl: 5.008
-  strict: 0
-  utf8: 0
-  warnings: 0
-version: 0.205
+  Archive::Tar: '1.54'
+  CPAN::DistnameInfo: '0.09'
+  CPAN::Index: '1.93'
+  Compress::Zlib: '0'
+  DBD::SQLite: '1.27'
+  File::HomeDir: '0'
+  File::Spec: '0'
+  IO::Zlib: '0'
+  LWP::Simple: '0'
+  parent: '0'
+version: '0.206'
+x_serialization_backend: 'CPAN::Meta::YAML version 0.012'

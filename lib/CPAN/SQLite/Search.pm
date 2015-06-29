@@ -1,11 +1,11 @@
-# $Id: Search.pm 42 2013-06-29 20:44:17Z stro $
+# $Id: Search.pm 45 2014-12-09 07:52:52Z stro $
 
 package CPAN::SQLite::Search;
 use strict;
 use warnings;
 no warnings qw(redefine);
 
-our $VERSION = '0.203';
+our $VERSION = '0.206';
 
 use English qw/-no_match_vars/;
 
@@ -277,10 +277,6 @@ sub dist_subchapter {
 
 CPAN::SQLite::Search - perform queries on the database
 
-=head1 VERSION
-
-version 0.205
-
 =head1 SYNOPSIS
 
   my $max_results = 200;
@@ -417,7 +413,7 @@ to specify the url of the distribution.
 =item * C<query> query
 
 If this results in more than one match, an array reference
-is returned, each member of which is a hash reference containg
+is returned, each member of which is a hash reference containing
 the C<auth_id>, C<cpanid>, and C<fullname> fields. If there
 is only one result found, a C<name> query based on the
 matched C<cpanid> is performed.
@@ -532,3 +528,4 @@ Copyright 2011-2013 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
 Use and redistribution are under the same terms as Perl itself.
 
 =cut
+

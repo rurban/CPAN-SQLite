@@ -12,7 +12,6 @@ lib/CPAN/SQLite/Search.pm
 lib/CPAN/SQLite/State.pm
 lib/CPAN/SQLite/Util.pm
 Makefile.PL
-Build.PL
 MANIFEST            This list of files
 README
 Changes
@@ -31,3 +30,5 @@ t/dot-cpan/CPAN/TestConfig.pm
 t/lib/TestShell.pm
 t/lib/TestSQL.pm
 
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)

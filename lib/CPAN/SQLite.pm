@@ -1,10 +1,10 @@
-# $Id: SQLite.pm 43 2014-08-04 06:51:27Z stro $
+# $Id: SQLite.pm 45 2014-12-09 07:52:52Z stro $
 
 package CPAN::SQLite;
 use strict;
 use warnings;
 
-our $VERSION = '0.204';
+our $VERSION = '0.206';
 
 use English qw/-no_match_vars/;
 
@@ -27,7 +27,7 @@ sub new {
     my $db_dir = $args{db_dir};
     my $urllist = [];
     my $keep_source_where;
-    # for testing undr Darwin, must load CPAN::MyConfig contained
+    # for testing under Darwin, must load CPAN::MyConfig contained
     # in PERL5LIB, as File::HomeDir doesn't use this
     if ($ENV{CPAN_SQLITE_TESTING}) {
       eval {require CPAN::MyConfig;};
@@ -96,10 +96,6 @@ sub query {
 
 CPAN::SQLite - maintain and search a minimal CPAN database
 
-=head1 VERSION
-
-version 0.205
-
 =head1 SYNOPSIS
 
   my $obj = CPAN::SQLite->new(CPAN => '/path/to/CPAN');
@@ -167,7 +163,7 @@ following arguments are accepted:
 =item * setup =E<gt> 1
 
 This specifies that the database is to be created and
-populated from the CPAN indices; any exisiting database
+populated from the CPAN indices; any existing database
 will be overwritten. Not specifying this option will
 assume that an existing database is to be updated.
 

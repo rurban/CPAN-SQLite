@@ -1,11 +1,11 @@
-# $Id: State.pm 42 2013-06-29 20:44:17Z stro $
+# $Id: State.pm 45 2014-12-09 07:52:52Z stro $
 
 package CPAN::SQLite::State;
 use strict;
 use warnings;
 no warnings qw(redefine);
 
-our $VERSION = '0.203';
+our $VERSION = '0.206';
 
 use English qw/-no_match_vars/;
 
@@ -397,10 +397,6 @@ __END__
 
 CPAN::SQLite::State - get state information on the database
 
-=head1 VERSION
-
-version 0.205
-
 =head1 DESCRIPTION
 
 This module gets information on the current state of the
@@ -448,3 +444,4 @@ in the indices, the information is marked for deletion.
 =back
 
 =cut
+

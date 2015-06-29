@@ -1,10 +1,10 @@
-# $Id: Info.pm 42 2013-06-29 20:44:17Z stro $
+# $Id: Info.pm 45 2014-12-09 07:52:52Z stro $
 
 package CPAN::SQLite::Info;
 use strict;
 use warnings;
 
-our $VERSION = '0.203';
+our $VERSION = '0.206';
 
 use English qw/-no_match_vars/;
 
@@ -241,10 +241,6 @@ sub trim {
 
 CPAN::SQLite::Info - extract information from CPAN indices
 
-=head1 VERSION
-
-version 0.205
-
 =head1 DESCRIPTION
 
 This module extracts information from the CPAN indices
@@ -341,3 +337,4 @@ hash reference with keys of
 L<CPAN::SQLite::Index>
 
 =cut
+

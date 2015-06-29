@@ -1,5 +1,12 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.206 
+  - No more Module::Build
+  - Fixed test failures on Windows
+  - Typo fixed
+     RT#86588: https://rt.cpan.org/Public/Bug/Display.html?id=86588
+     (reported by David Steinbrunner)
+
 0.205 Nov 22, 2014
   - Fixed test failures
 

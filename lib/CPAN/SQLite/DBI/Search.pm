@@ -1,11 +1,11 @@
-# $Id: Search.pm 42 2013-06-29 20:44:17Z stro $
+# $Id: Search.pm 45 2014-12-09 07:52:52Z stro $
 
 package CPAN::SQLite::DBI::Search;
 
 use strict;
 use warnings;
 
-our $VERSION = '0.203';
+our $VERSION = '0.206';
 
 use parent 'CPAN::SQLite::DBI';
 use CPAN::SQLite::DBI qw($tables $dbh);
@@ -260,10 +260,6 @@ sub sql_statement {
 =head1 NAME
 
 CPAN::SQLite::DBI::Search - DBI information for searching the CPAN::SQLite database
-
-=head1 VERSION
-
-version 0.205
 
 =head1 DESCRIPTION
 

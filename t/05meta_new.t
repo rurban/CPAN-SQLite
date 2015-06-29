@@ -1,4 +1,4 @@
-# $Id: 05meta_new.t 32 2011-06-13 02:37:53Z stro $
+# $Id: 05meta_new.t 45 2014-12-09 07:52:52Z stro $
 
 use strict;
 use warnings;
@@ -11,7 +11,7 @@ use Config;
 use FindBin;
 use CPAN::DistnameInfo;
 use CPAN::SQLite::Util qw(download);
-use lib "$FindBin::Bin/lib";
+use lib 't/lib';
 use TestSQL qw($mods $auths $dists has_hash_data vcmp);
 use TestShell;
 
