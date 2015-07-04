@@ -1,10 +1,10 @@
-# $Id: Index.pm 45 2014-12-09 07:52:52Z stro $
+# $Id: Index.pm 49 2015-07-05 00:06:04Z stro $
 
 package CPAN::SQLite::Index;
 use strict;
 use warnings;
 
-our $VERSION = '0.206';
+our $VERSION = '0.207';
 
 use English qw/-no_match_vars/;
 
@@ -202,6 +202,10 @@ sub DESTROY {
 
 CPAN::SQLite::Index - set up or update database tables.
 
+=head1 VERSION
+
+version 0.207
+
 =head1 SYNOPSIS
 
  my $index = CPAN::SQLite::Index->new(setup => 1);
@@ -259,7 +263,7 @@ F<$CPAN/modules/03modlist.data.gz> will be fetched
 from the CPAN mirror specified by the C<$cpan> variable
 at the beginning of L<CPAN::SQLite::Index>. If you are
 using this option, it is recommended to use the
-same CPAN mirror with subsequent updates, to ensure consistency 
+same CPAN mirror with subsequent updates, to ensure consistency
 of the database. As well, the information on the locations
 of the CPAN mirrors used for Template-Toolkit and GeoIP
 is written.
@@ -291,7 +295,7 @@ existing ones, or deleting obsolete items.
 
 =head1 SEE ALSO
 
-L<CPAN::SQLite::Info>, L<CPAN::SQLite::State>, 
+L<CPAN::SQLite::Info>, L<CPAN::SQLite::State>,
 L<CPAN::SQLite::Populate>,
 and L<CPAN::SQLite::Util>.
 Development takes place on the CPAN-SQLite project
@@ -305,7 +309,7 @@ Serguei Trouchelle E<lt>stro@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2006 by Randy Kobes E<lt>r.kobes@uwinnipeg.caE<gt>. 
+Copyright 2006 by Randy Kobes E<lt>r.kobes@uwinnipeg.caE<gt>.
 
 Copyright 2011 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
 

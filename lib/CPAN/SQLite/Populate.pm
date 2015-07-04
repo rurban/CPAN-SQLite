@@ -1,11 +1,11 @@
-# $Id: Populate.pm 45 2014-12-09 07:52:52Z stro $
+# $Id: Populate.pm 49 2015-07-05 00:06:04Z stro $
 
 package CPAN::SQLite::Populate;
 use strict;
 use warnings;
 no warnings qw(redefine);
 
-our $VERSION = '0.206';
+our $VERSION = '0.207';
 
 use English qw/-no_match_vars/;
 
@@ -125,7 +125,7 @@ sub populate_tables {
     print_debug('Fatal error from ', ref($info_obj), ':', $info_obj->{'error_msg'});
     return;
   }
-  
+
   my @tables = qw(auths dists mods chaps);
   for my $method (@methods) {
     for my $table (@tables) {
@@ -148,7 +148,7 @@ sub populate_tables {
     print_debug('Fatal error from ', ref($info_obj), ':', $info_obj->{'error_msg'});
     return;
   }
-  
+
   return 1;
 }
 
@@ -850,10 +850,14 @@ sub db_error {
 
 CPAN::SQLite::Populate - create and populate database tables
 
+=head1 VERSION
+
+version 0.207
+
 =head1 DESCRIPTION
 
 This module is responsible for creating the tables
-(if C<setup> is passed as an option) and then for 
+(if C<setup> is passed as an option) and then for
 inserting, updating, or deleting (as appropriate) the
 relevant information from the indices of
 I<CPAN::SQLite::Info> and the
@@ -960,7 +964,7 @@ F<My-Distname-0.22.tar.gz>, C<dist_vers> will be C<0.22>).
 =item * dist_abs
 
 This is a description of the distribution. If not directly
-supplied, the description for, eg, C<Foo::Bar>, if present, will 
+supplied, the description for, eg, C<Foo::Bar>, if present, will
 be used for the C<Foo-Bar> distribution.
 
 =item * dist_dslip

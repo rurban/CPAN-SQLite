@@ -1,9 +1,9 @@
-# $Id: META.pm 45 2014-12-09 07:52:52Z stro $
+# $Id: META.pm 49 2015-07-05 00:06:04Z stro $
 
 package CPAN::SQLite::META;
 use strict;
 use warnings;
-our $VERSION = '0.206';
+our $VERSION = '0.207';
 
 use English qw/-no_match_vars/;
 
@@ -414,6 +414,10 @@ sub extract_distinfo {
 
 CPAN::SQLite::META - helper module for CPAN.pm integration
 
+=head1 VERSION
+
+version 0.207
+
 =head1 DESCRIPTION
 
 This module has no direct public interface, but is intended
@@ -528,4 +532,3 @@ given, will force a rebuilding of the database regardless
 of the time difference.
 
 =cut
-

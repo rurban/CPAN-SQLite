@@ -1,10 +1,10 @@
-# $Id: Info.pm 45 2014-12-09 07:52:52Z stro $
+# $Id: Info.pm 49 2015-07-05 00:06:04Z stro $
 
 package CPAN::SQLite::Info;
 use strict;
 use warnings;
 
-our $VERSION = '0.206';
+our $VERSION = '0.207';
 
 use English qw/-no_match_vars/;
 
@@ -241,6 +241,10 @@ sub trim {
 
 CPAN::SQLite::Info - extract information from CPAN indices
 
+=head1 VERSION
+
+version 0.207
+
 =head1 DESCRIPTION
 
 This module extracts information from the CPAN indices
@@ -311,7 +315,7 @@ hash reference with keys of
 
 =item C<chapterid> - the chapter id of the module, if present
 
-=item C<dslip> - a 5 character string specifying the dslip 
+=item C<dslip> - a 5 character string specifying the dslip
 (development, support, language, interface, public licence) information.
 
 =back
@@ -320,7 +324,7 @@ hash reference with keys of
 
 This contains information on CPAN authors. Keys of this hash
 reference are the CPAN ids, with the associated value being a
-hash reference with keys of 
+hash reference with keys of
 
 =over 3
 
@@ -337,4 +341,3 @@ hash reference with keys of
 L<CPAN::SQLite::Index>
 
 =cut
-

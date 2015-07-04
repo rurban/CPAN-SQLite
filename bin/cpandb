@@ -168,6 +168,10 @@ __END__
 
 cpandb - interface to C<CPAN::SQLite>
 
+=head1 VERSION
+
+version 0.207
+
 =head1 DESCRIPTION
 
 This script is an interface to the routines of
@@ -272,4 +276,3 @@ case-insensitive manner.
 L<CPAN::SQLite>.
 
 =cut
-

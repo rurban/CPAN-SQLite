@@ -1,6 +1,10 @@
 Revision history for Perl extension CPAN::SQLite.
 
-0.206 
+0.207 Jul 4, 2015
+  - Detect HARNESS_OPTIONS and bail out
+  - Back to Dist::Zilla
+
+0.206 Jun 29, 2015
   - No more Module::Build
   - Fixed test failures on Windows
   - Typo fixed

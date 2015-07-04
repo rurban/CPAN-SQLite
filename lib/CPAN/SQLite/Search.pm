@@ -1,11 +1,11 @@
-# $Id: Search.pm 45 2014-12-09 07:52:52Z stro $
+# $Id: Search.pm 49 2015-07-05 00:06:04Z stro $
 
 package CPAN::SQLite::Search;
 use strict;
 use warnings;
 no warnings qw(redefine);
 
-our $VERSION = '0.206';
+our $VERSION = '0.207';
 
 use English qw/-no_match_vars/;
 
@@ -277,6 +277,10 @@ sub dist_subchapter {
 
 CPAN::SQLite::Search - perform queries on the database
 
+=head1 VERSION
+
+version 0.207
+
 =head1 SYNOPSIS
 
   my $max_results = 200;
@@ -354,7 +358,7 @@ four basic options to be used for the C<$type =E<gt> $value> option:
 
 =item * query =E<gt> $query_term
 
-This will search through module names, 
+This will search through module names,
 distribution names, or CPAN author names and ids
 (for C<module>, C<dist>, and C<author> modes
 respectively). The results are case insensitive,
@@ -404,7 +408,7 @@ of the C<auths> table. As well, an array reference
 C<$results-E<gt>{dists}> is returned representing
 all distributions associated with that C<cpanid> - each
 member of the array reference is a hash reference
-describing the C<dist_id>, C<dist_name>, 
+describing the C<dist_id>, C<dist_name>,
 C<dist_abs>, C<dist_vers>, and C<dist_file> fields in the
 C<dists> table. An additional entry, C<download>, is
 supplied, which can be used as C<$CPAN/authors/id/$download>
@@ -428,7 +432,7 @@ matched C<cpanid> is performed.
 
 This returns the C<mod_id>, C<mod_name>, C<mod_abs>, C<mod_vers>,
 C<dslip>, C<chapterid>, C<dist_id>, C<dist_name>, C<dist_file>,
-C<auth_id>, C<cpanid>, C<fullname>, and C<email> 
+C<auth_id>, C<cpanid>, C<fullname>, and C<email>
 of the C<auths>, C<mods>, and C<dists> tables.
 As well, the following entries may be present.
 
@@ -521,11 +525,10 @@ Serguei Trouchelle E<lt>stro@cpan.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2006,2008 by Randy Kobes E<lt>r.kobes@uwinnipeg.caE<gt>. 
+Copyright 2006,2008 by Randy Kobes E<lt>r.kobes@uwinnipeg.caE<gt>.
 
 Copyright 2011-2013 by Serguei Trouchelle E<lt>stro@cpan.orgE<gt>.
 
 Use and redistribution are under the same terms as Perl itself.
 
 =cut
-

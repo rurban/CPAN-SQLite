@@ -1,9 +1,16 @@
-# $Id: Makefile.PL 42 2013-06-29 20:44:17Z stro $
+use lib 'inc';
+use Devel::AssertOS qw[];
+# $Id: Makefile.PL 49 2015-07-05 00:06:04Z stro $
 
 use strict;
 use warnings;
 
 use ExtUtils::MakeMaker;
+
+if ($ENV{'HARNESS_OPTIONS'}) {
+  print 'CPAN::SQLite tests cannot be run in parallel. Remove HARNESS_OPTIONS variable to proceed further.';
+  exit(0);
+}
 
 my @exe_files = map {"bin/$_"} qw(cpandb);
 my $goners = join ' ', qw(

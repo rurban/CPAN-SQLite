@@ -1,10 +1,17 @@
-# $Id: Index.pm 45 2014-12-09 07:52:52Z stro $
+# $Id: Index.pm 49 2015-07-05 00:06:04Z stro $
 
 package CPAN::SQLite::DBI::Index;
 use strict;
 use warnings;
 
-our $VERSION = '0.206';
+BEGIN {
+  our $VERSION = '0.207';
+  $CPAN::SQLite::DBI::Index::info::VERSION = $VERSION;
+  $CPAN::SQLite::DBI::Index::chaps::VERSION = $VERSION;
+  $CPAN::SQLite::DBI::Index::mods::VERSION = $VERSION;
+  $CPAN::SQLite::DBI::Index::dists::VERSION = $VERSION;
+  $CPAN::SQLite::DBI::Index::auths::VERSION = $VERSION;
+}
 
 use CPAN::SQLite::DBI qw($dbh);
 use parent 'CPAN::SQLite::DBI';
@@ -201,6 +208,10 @@ sub sth_delete {
 
 CPAN::SQLite::DBI::Index - DBI information for indexing the CPAN::SQLite database
 
+=head1 VERSION
+
+version 0.207
+
 =head1 DESCRIPTION
 
 This module provides various methods for L<CPAN::SQLite::Index> in
@@ -238,4 +249,3 @@ values from a table.
 L<CPAN::SQLite::Index>
 
 =cut
-
