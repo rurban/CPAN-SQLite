@@ -1,5 +1,3 @@
-use lib 'inc';
-use Devel::AssertOS qw[];
 # $Id: Makefile.PL 49 2015-07-05 00:06:04Z stro $
 
 use strict;

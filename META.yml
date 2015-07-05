@@ -29,9 +29,6 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: '1.4'
 name: CPAN-SQLite
-no_index:
-  directory:
-    - inc
 requires:
   CPAN: '0'
   CPAN::DistnameInfo: '0'
@@ -54,4 +51,4 @@ requires:
   strict: '0'
   utf8: '0'
   warnings: '0'
-version: '0.207'
+version: '0.208'

@@ -13,11 +13,6 @@
       "version" : 2
    },
    "name" : "CPAN-SQLite",
-   "no_index" : {
-      "directory" : [
-         "inc"
-      ]
-   },
    "prereqs" : {
       "configure" : {
          "requires" : {
@@ -88,6 +83,6 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.207"
+   "version" : "0.208"
 }
 

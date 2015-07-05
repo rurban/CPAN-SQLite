@@ -170,7 +170,7 @@ cpandb - interface to C<CPAN::SQLite>
 
 =head1 VERSION
 
-version 0.207
+version 0.208
 
 =head1 DESCRIPTION
 
