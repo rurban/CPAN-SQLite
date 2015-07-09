@@ -28,7 +28,6 @@ my @files = (
     'lib/CPAN/SQLite/State.pm',
     'lib/CPAN/SQLite/Util.pm',
     't/00-all_prereqs.t',
-    't/00-check-deps.t',
     't/00-compile.t',
     't/00-compile/lib_CPAN_SQLite_DBI_Index_pm.t',
     't/00-compile/lib_CPAN_SQLite_DBI_Search_pm.t',
@@ -41,11 +40,9 @@ my @files = (
     't/00-compile/lib_CPAN_SQLite_State_pm.t',
     't/00-compile/lib_CPAN_SQLite_Util_pm.t',
     't/00-compile/lib_CPAN_SQLite_pm.t',
-    't/00-load.t',
     't/00-report-prereqs.dd',
     't/00-report-prereqs.t',
     't/000-report-versions.t',
-    't/00compile.t',
     't/01basic.t',
     't/02drop.t',
     't/03info.t',
@@ -69,6 +66,7 @@ my @files = (
     't/release-pause-permissions.t',
     't/release-pod-linkcheck.t',
     't/release-pod-syntax.t',
+    't/testrules.yml',
     't/zzz-check-breaks.t'
 );
 

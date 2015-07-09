@@ -15,7 +15,6 @@ Makefile.PL
 MANIFEST            This list of files
 README
 Changes
-t/00compile.t
 t/01basic.t
 t/02drop.t
 t/03info.t
@@ -29,4 +28,4 @@ t/cpan/modules/03modlist.data.gz
 t/dot-cpan/CPAN/TestConfig.pm
 t/lib/TestShell.pm
 t/lib/TestSQL.pm
-
+t/testrules.yml

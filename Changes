@@ -1,5 +1,9 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.209 Jul 8, 2015
+  - Removed some additional tests that don't work well on 5.6.2
+  - Better handling of parallel testing
+
 0.208 Jul 5, 2015
   - Got rid of [AssertOS]
 

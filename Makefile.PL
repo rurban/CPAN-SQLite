@@ -1,14 +1,9 @@
-# $Id: Makefile.PL 49 2015-07-05 00:06:04Z stro $
+# $Id: Makefile.PL 51 2015-07-09 04:58:51Z stro $
 
 use strict;
 use warnings;
 
 use ExtUtils::MakeMaker;
-
-if ($ENV{'HARNESS_OPTIONS'}) {
-  print 'CPAN::SQLite tests cannot be run in parallel. Remove HARNESS_OPTIONS variable to proceed further.';
-  exit(0);
-}
 
 my @exe_files = map {"bin/$_"} qw(cpandb);
 my $goners = join ' ', qw(
@@ -58,5 +53,10 @@ my $prereqs = {
     'CPAN::Index'           => 1.93, # No more false negatives because of CPAN-Index
     'parent'                => 0,
 };
+
+if ($ENV{'HARNESS_OPTIONS'}) {
+  # Parallel testing requires Test::Harness 3.31
+  $prereqs->{'Test::Harness'} = 3.31;
+}
 
 WriteMakefile( %opts, 'PREREQ_PM' => $prereqs);

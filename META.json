@@ -69,20 +69,17 @@
             "ExtUtils::MakeMaker" : "0",
             "File::Copy" : "0",
             "File::Spec" : "0",
-            "File::Temp" : "0",
             "FindBin" : "0",
             "IO::Handle" : "0",
             "IPC::Open3" : "0",
             "Scalar::Util" : "0",
-            "Test::CheckDeps" : "0.010",
             "Test::More" : "0.94",
-            "Test::UseAllModules" : "0",
             "base" : "0",
             "lib" : "0"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.208"
+   "version" : "0.209"
 }
 
