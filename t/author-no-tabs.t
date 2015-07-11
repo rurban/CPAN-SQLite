@@ -50,6 +50,7 @@ my @files = (
     't/04search_everything.t',
     't/05meta_new.t',
     't/05meta_update.t',
+    't/06retrieve.t',
     't/author-critic.t',
     't/author-eol.t',
     't/author-no-tabs.t',
@@ -66,8 +67,7 @@ my @files = (
     't/release-pause-permissions.t',
     't/release-pod-linkcheck.t',
     't/release-pod-syntax.t',
-    't/testrules.yml',
-    't/zzz-check-breaks.t'
+    't/testrules.yml'
 );
 
 notabs_ok($_) foreach @files;

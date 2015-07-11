@@ -1,10 +1,10 @@
-# $Id: Index.pm 51 2015-07-09 04:58:51Z stro $
+# $Id: Index.pm 52 2015-07-12 00:49:18Z stro $
 
 package CPAN::SQLite::Index;
 use strict;
 use warnings;
 
-our $VERSION = '0.209';
+our $VERSION = '0.210';
 
 use English qw/-no_match_vars/;
 
@@ -15,7 +15,7 @@ use CPAN::SQLite::DBI qw($tables);
 use File::Spec::Functions qw(catfile);
 use File::Basename;
 use File::Path;
-use LWP::Simple qw(getstore is_success);
+use HTTP::Tiny;
 
 unless ($ENV{CPAN_SQLITE_NO_LOG_FILES}) {
   $ENV{CPAN_SQLITE_DEBUG} = 1;
@@ -119,21 +119,33 @@ sub fetch_cpan_indices {
   my $self = shift;
 
   my $CPAN = $self->{CPAN};
-  my $indices = {'01mailrc.txt.gz' => 'authors',
-         '02packages.details.txt.gz' => 'modules',
-         '03modlist.data.gz' => 'modules',
-        };
+  my $indices = {
+    '01mailrc.txt.gz' => 'authors',
+    '02packages.details.txt.gz' => 'modules',
+    '03modlist.data.gz' => 'modules',
+  };
+
   foreach my $index (keys %$indices) {
     my $file = catfile($CPAN, $indices->{$index}, $index);
     next if (-e $file and -M $file < 1);
     my $dir = dirname($file);
     unless (-d $dir) {
-      mkpath($dir, 1, oct(755)) or die "Cannot mkpath $dir: $!";
+      mkpath($dir, 0, oct(755)) or die "Cannot mkpath $dir: $!";
     }
     my @urllist = @{$self->{urllist}};
     foreach my $cpan(@urllist) {
       my $from = join '/', ($cpan, $indices->{$index}, $index);
-      last if is_success(getstore($from, $file));
+      if (my $response = HTTP::Tiny->new->get($from)) {
+        if ($response->{'success'}) {
+          if (open(my $FILE, '>', $file)) {
+            binmode $FILE;
+            print $FILE $response->{'content'};
+            if (close($FILE)) {
+              next;
+            }
+          }
+        }
+      }
     }
     unless (-f $file) {
       $CPAN::FrontEnd->mywarn("Cannot retrieve '$file'");
@@ -191,7 +203,7 @@ sub error_fh {
 sub DESTROY {
   unless ($ENV{CPAN_SQLITE_NO_LOG_FILES}) {
     close STDOUT;
-    open(STDOUT, '>&', $oldout);
+    open(STDOUT, '>&', $oldout) if $oldout;
   }
   return;
 }
@@ -204,7 +216,7 @@ CPAN::SQLite::Index - set up or update database tables.
 
 =head1 VERSION
 
-version 0.209
+version 0.210
 
 =head1 SYNOPSIS
 

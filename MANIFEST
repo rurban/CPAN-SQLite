@@ -22,6 +22,7 @@ t/04search.t
 t/04search_everything.t
 t/05meta_new.t
 t/05meta_update.t
+t/06retrieve.t
 t/cpan/authors/01mailrc.txt.gz
 t/cpan/modules/02packages.details.txt.gz
 t/cpan/modules/03modlist.data.gz

@@ -1,10 +1,10 @@
-# $Id: Util.pm 51 2015-07-09 04:58:51Z stro $
+# $Id: Util.pm 52 2015-07-12 00:49:18Z stro $
 
 package CPAN::SQLite::Util;
 use strict;
 use warnings;
 
-our $VERSION = '0.209';
+our $VERSION = '0.210';
 
 use English qw/-no_match_vars/;
 
@@ -209,7 +209,7 @@ sub vcmp {
 package CPAN::SQLite::Version;
 
 use strict;
-our $VERSION = '0.209';
+our $VERSION = '0.210';
 no warnings;
 
 # CPAN::Version::vcmp courtesy Jost Krieger
@@ -315,7 +315,7 @@ CPAN::SQLite::Util - export some common data structures used by CPAN::SQLite::*
 
 =head1 VERSION
 
-version 0.209
+version 0.210
 
 =head1 DESCRIPTION
 

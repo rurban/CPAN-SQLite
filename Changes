@@ -1,5 +1,8 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.210 Jul 11, 2015
+  - Moved from LWP::Simple to HTTP::Tiny
+
 0.209 Jul 8, 2015
   - Removed some additional tests that don't work well on 5.6.2
   - Better handling of parallel testing
