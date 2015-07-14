@@ -1,10 +1,10 @@
-# $Id: SQLite.pm 52 2015-07-12 00:49:18Z stro $
+# $Id: SQLite.pm 53 2015-07-14 23:14:34Z stro $
 
 package CPAN::SQLite;
 use strict;
 use warnings;
 
-our $VERSION = '0.210';
+our $VERSION = '0.211';
 
 use English qw/-no_match_vars/;
 
@@ -98,7 +98,7 @@ CPAN::SQLite - maintain and search a minimal CPAN database
 
 =head1 VERSION
 
-version 0.210
+version 0.211
 
 =head1 SYNOPSIS
 

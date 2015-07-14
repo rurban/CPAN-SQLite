@@ -1,5 +1,8 @@
 Revision history for Perl extension CPAN::SQLite.
 
+0.211 Jul 14, 2015
+  - Fixed t/06retrieve.t by using predefined CPAN urllist
+
 0.210 Jul 11, 2015
   - Moved from LWP::Simple to HTTP::Tiny
 

@@ -1,4 +1,4 @@
-# $Id: 06retrieve.t 52 2015-07-12 00:49:18Z stro $
+# $Id: 06retrieve.t 53 2015-07-14 23:14:34Z stro $
 
 use strict;
 use warnings;
@@ -10,7 +10,6 @@ use CPAN::DistnameInfo;
 use FindBin;
 use lib "$FindBin::Bin/lib";
 use CPAN::SQLite::Index;
-use CPAN::Config;
 
 plan tests => 5;
 
@@ -24,7 +23,7 @@ ok (-d $CPAN);
 my $info = CPAN::SQLite::Index->new(
   'CPAN' => $CPAN,
   'db_dir' => $cwd,
-  'urllist' => $CPAN::Config->{'urllist'},
+  'urllist' => ['http://search.cpan.org/CPAN/'],
 );
 
 isa_ok($info, 'CPAN::SQLite::Index');

@@ -62,7 +62,6 @@
             "CPAN::Meta" : "2.120900"
          },
          "requires" : {
-            "CPAN::Config" : "0",
             "CPAN::HandleConfig" : "0",
             "CPAN::Version" : "0",
             "Carp" : "0",
@@ -81,6 +80,6 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.210"
+   "version" : "0.211"
 }
 

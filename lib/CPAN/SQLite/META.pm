@@ -1,9 +1,9 @@
-# $Id: META.pm 52 2015-07-12 00:49:18Z stro $
+# $Id: META.pm 53 2015-07-14 23:14:34Z stro $
 
 package CPAN::SQLite::META;
 use strict;
 use warnings;
-our $VERSION = '0.210';
+our $VERSION = '0.211';
 
 use English qw/-no_match_vars/;
 
@@ -416,7 +416,7 @@ CPAN::SQLite::META - helper module for CPAN.pm integration
 
 =head1 VERSION
 
-version 0.210
+version 0.211
 
 =head1 DESCRIPTION
 
