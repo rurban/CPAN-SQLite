@@ -14,31 +14,38 @@ BEGIN {
   $CPAN::SQLite::DBI::Search::auths::VERSION = $VERSION;
 }
 
+use mro 'dfs';
 use parent 'CPAN::SQLite::DBI';
 use CPAN::SQLite::DBI qw($tables $dbh);
 use CPAN::SQLite::Util qw($full_id);
 
 package CPAN::SQLite::DBI::Search::info;
+use mro 'dfs';
 use parent 'CPAN::SQLite::DBI::Search';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search::chaps;
+use mro 'dfs';
 use parent 'CPAN::SQLite::DBI::Search';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search::mods;
+use mro 'dfs';
 use parent 'CPAN::SQLite::DBI::Search';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search::dists;
+use mro 'dfs';
 use parent 'CPAN::SQLite::DBI::Search';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search::auths;
+use mro 'dfs';
 use parent 'CPAN::SQLite::DBI::Search';
 use CPAN::SQLite::DBI qw($dbh);
 
 package CPAN::SQLite::DBI::Search;
+use mro 'dfs';
 use parent 'CPAN::SQLite::DBI';
 use CPAN::SQLite::DBI qw($tables $dbh);
 use CPAN::SQLite::Util qw($full_id expand_dslip download %chaps);
